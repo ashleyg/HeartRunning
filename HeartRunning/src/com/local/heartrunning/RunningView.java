@@ -9,6 +9,7 @@ public class RunningView extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        GPSManager gps = new GPSManager(this);
         setContentView(R.layout.running_view);
     }
 
