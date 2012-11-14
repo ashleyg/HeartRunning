@@ -63,8 +63,7 @@ public class GPSManager {
 		
 	}
 
-	
-
-	
-
+	public ArrayList<Location> getLocations() {
+		return locations;
+	}
 }
