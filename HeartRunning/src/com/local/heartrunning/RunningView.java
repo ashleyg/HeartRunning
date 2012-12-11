@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.hardware.Camera;
 import android.util.Log;
 import android.view.Menu;
@@ -16,11 +17,13 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 public class RunningView extends Activity {
 
 	// GUI Components
 	Button finishRunningButton;
+	TextView hrText;
 	
 	// Other stuff
 	GPSManager gps;
@@ -44,6 +47,8 @@ public class RunningView extends Activity {
 			}
 		});
         
+        hrText = (TextView)findViewById(R.id.hrText);
+        
         // Create an instance of Camera
         mCamera = getCameraInstance();
         
@@ -56,14 +61,21 @@ public class RunningView extends Activity {
     }
     
     public void processImage(Bitmap bitmap) {
-    	/*
+    	double total = 0.0;
+    	
     	for(int x = 0; x < bitmap.getWidth(); x++) {
     		for( int y = 0; y < bitmap.getHeight(); y++) {
     			int p = bitmap.getPixel(x, y);
-    			Log.d("HR-IP", "P: "+p);
+    			int r = Color.red(p);
+    			int g = Color.green(p);
+    			int b = Color.blue(p);
+    			
+    			total += (r+g+b)/3;
     		}
     	}
-    	*/
+    	
+    	double avgBrightness = total/(bitmap.getWidth()*bitmap.getHeight());
+    	hrText.setText(avgBrightness+" bpm");
     }
 
     @Override
