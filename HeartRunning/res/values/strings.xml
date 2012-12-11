@@ -11,5 +11,6 @@
     <string name="title_activity_running_view">RunningView</string>
     <string name="title_activity_post_run_view">PostRunView</string>
     <string name="button_finish_run">Finish Run</string>
-
+    <string name="app_id">507710032584613</string>
+    
 </resources>
