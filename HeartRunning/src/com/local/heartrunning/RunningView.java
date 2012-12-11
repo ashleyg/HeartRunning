@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.hardware.Camera;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -48,13 +49,21 @@ public class RunningView extends Activity {
         
         // Create our Preview view and set it as the content of our activity.
         mPreview = new CameraPreview(this, mCamera);
+        mPreview.linkParent(this);
         FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
         preview.addView(mPreview);
 
     }
     
     public void processImage(Bitmap bitmap) {
-    	
+    	/*
+    	for(int x = 0; x < bitmap.getWidth(); x++) {
+    		for( int y = 0; y < bitmap.getHeight(); y++) {
+    			int p = bitmap.getPixel(x, y);
+    			Log.d("HR-IP", "P: "+p);
+    		}
+    	}
+    	*/
     }
 
     @Override

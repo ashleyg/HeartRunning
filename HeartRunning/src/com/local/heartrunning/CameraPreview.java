@@ -39,15 +39,20 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     public void surfaceCreated(SurfaceHolder holder) {
         // The Surface has been created, now tell the camera where to draw the preview.
         try {
+        	mCamera.setPreviewCallback(this);
             mCamera.setPreviewDisplay(holder);
             mCamera.startPreview();
+            Log.d(TAG,"Started preview");
         } catch (IOException e) {
+        	mCamera.release();
+        	
             Log.d(TAG, "Error setting camera preview: " + e.getMessage());
         }
     }
 
     public void surfaceDestroyed(SurfaceHolder holder) {
-        // empty. Take care of releasing the Camera preview in your activity.
+        mCamera.stopPreview();  
+        mCamera.release(); 
     }
 
     public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
@@ -71,7 +76,8 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
         // start preview with new settings
         try {
-            mCamera.setPreviewDisplay(mHolder);
+        	mCamera.setPreviewCallback(this);
+        	mCamera.setPreviewDisplay(mHolder);
             mCamera.startPreview();
 
         } catch (Exception e){
@@ -86,8 +92,9 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     }
 
 	public void onPreviewFrame(byte[] imageData, Camera arg1) {
+		Log.d(TAG,"HERE");
 		Size ps = mCamera.getParameters().getPreviewSize();
-		YuvImage image = new YuvImage(imageData,ImageFormat.YV12,ps.width,ps.height, null);
+		YuvImage image = new YuvImage(imageData,ImageFormat.NV21,ps.width,ps.height, null);
 		// TODO - Look into getting the camera to give a native BMP format, available on some phones, will need code
 		// to do both.
 		
@@ -96,6 +103,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		image.compressToJpeg(new Rect(0,0,ps.width,ps.height), 50, out);
 		Bitmap bitmap = BitmapFactory.decodeByteArray(out.toByteArray(), 0, out.size());
-		rv.processImage(bitmap); // Pass it up to the parent processing method
+		if(rv != null)
+			rv.processImage(bitmap); // Pass it up to the parent processing method
 	}
 }
