@@ -60,22 +60,23 @@ public class RunningView extends Activity {
 
     }
     
-    public void processImage(Bitmap bitmap) {
-    	double total = 0.0;
+    //public void processImage(Bitmap bitmap) {
+    public void processImage(byte[] imageData, int width, int height) {
+    	int total = 0;
     	
-    	for(int x = 0; x < bitmap.getWidth(); x++) {
-    		for( int y = 0; y < bitmap.getHeight(); y++) {
-    			int p = bitmap.getPixel(x, y);
-    			int r = Color.red(p);
-    			int g = Color.green(p);
-    			int b = Color.blue(p);
-    			
-    			total += (r+g+b)/3;
-    		}
+    	//Loop through the first width*height which are apparently
+    	//http://stackoverflow.com/questions/5272388/need-help-with-androids-nv21-format 
+    	//The last comment says this
+    	//TODO - Check the cast does something remotely useful
+    	
+    	//NOTE the imageData.size() != width*height so please please don't do enhanced forloop.
+    	for(int x = 0; x < width*height; x++) {
+    		total += (int)imageData[x];
     	}
     	
-    	double avgBrightness = total/(bitmap.getWidth()*bitmap.getHeight());
+    	double avgBrightness = total / (width*height);
     	hrText.setText(avgBrightness+" bpm");
+    	Log.d("BPM",""+avgBrightness);
     }
 
     @Override

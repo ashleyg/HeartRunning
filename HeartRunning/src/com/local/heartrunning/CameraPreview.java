@@ -92,18 +92,8 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     }
 
 	public void onPreviewFrame(byte[] imageData, Camera arg1) {
-		Log.d(TAG,"HERE");
 		Size ps = mCamera.getParameters().getPreviewSize();
-		YuvImage image = new YuvImage(imageData,ImageFormat.NV21,ps.width,ps.height, null);
-		// TODO - Look into getting the camera to give a native BMP format, available on some phones, will need code
-		// to do both.
-		
-		// Explains the following - http://stackoverflow.com/questions/7794307/getting-image-from-surfaceview-to-imageview
-		// Some tricks to speed things up = http://kfb-android.blogspot.co.uk/2009/04/image-processing-in-android.html
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		image.compressToJpeg(new Rect(0,0,ps.width,ps.height), 50, out);
-		Bitmap bitmap = BitmapFactory.decodeByteArray(out.toByteArray(), 0, out.size());
 		if(rv != null)
-			rv.processImage(bitmap); // Pass it up to the parent processing method
+			rv.processImage(imageData,ps.width,ps.height);
 	}
 }
