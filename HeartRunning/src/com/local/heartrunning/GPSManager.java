@@ -18,7 +18,8 @@ public class GPSManager {
 	
 	private LocationManager locationManager;
 	private LocationListener locationListener;
-	private ArrayList<Location> locations;
+	
+	private ArrayList<DataPoint> dataPoints;
 	private static final String debugTag = "GPS";
 
 	/**
@@ -48,8 +49,7 @@ public class GPSManager {
 		
 		// Register the listener with the Location Manager to receive location updates
 		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, locationListener);
-		 
-		locations = new ArrayList<Location>();
+		dataPoints = new ArrayList<DataPoint>();
 	}
 	
 	//Stop getting location updates
@@ -58,12 +58,11 @@ public class GPSManager {
 	}
 	
 	protected void newLocation(Location location) {
-		locations.add(location);
-		Log.i(debugTag, String.valueOf(locations.size()));
-		
+		dataPoints.add(new DataPoint(location,0));
+		Log.i(debugTag, String.valueOf(dataPoints.size()));
 	}
-
-	public ArrayList<Location> getLocations() {
-		return locations;
+	
+	public ArrayList<DataPoint> getDataPoints() {
+		return dataPoints;
 	}
 }
