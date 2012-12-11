@@ -2,11 +2,16 @@ package com.local.heartrunning;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.hardware.Camera;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.FrameLayout;
 
 public class RunningView extends Activity {
 
@@ -16,12 +21,15 @@ public class RunningView extends Activity {
 	// Other stuff
 	GPSManager gps;
 	
+	private Camera mCamera;
+    private CameraPreview mPreview;
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.running_view);
         
-        // Initialise the GPS view
+        // Initialize the GPS view
         gps = new GPSManager(this);
         
         // Load GUI Components
@@ -32,6 +40,14 @@ public class RunningView extends Activity {
 			}
 		});
         
+        // Create an instance of Camera
+        mCamera = getCameraInstance();
+
+        // Create our Preview view and set it as the content of our activity.
+        mPreview = new CameraPreview(this, mCamera);
+        FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
+        preview.addView(mPreview);
+
     }
 
     @Override
@@ -43,5 +59,38 @@ public class RunningView extends Activity {
     public void stopRuning() {
     	Intent intentStopRunning = new Intent(this,PostRunView.class);
     	startActivity(intentStopRunning);
+    }
+    
+    /** Check if this device has a camera */
+    private boolean checkCameraHardware(Context context) {
+        if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)){
+            AlertDialog.Builder b = new AlertDialog.Builder(context);
+            /*
+            b.setMessage("You have a camera! Don't you look nice today.");
+            AlertDialog a = b.create();
+            a.show();
+            */
+            return true;
+        } else {
+        	/*
+            AlertDialog.Builder b = new AlertDialog.Builder(context);
+            b.setMessage("Sorry this has no camera");
+            AlertDialog a = b.create();
+            a.show();
+            */
+            return false;
+        }
+    }
+    
+    /** A safe way to get an instance of the Camera object. */
+    public static Camera getCameraInstance(){
+        Camera c = null;
+        try {
+            c = Camera.open(); // attempt to get a Camera instance
+        }
+        catch (Exception e){
+            // Camera is not available (in use or does not exist)
+        }
+        return c; // returns null if camera is unavailable
     }
 }
