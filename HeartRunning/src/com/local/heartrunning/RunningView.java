@@ -1,11 +1,14 @@
 package com.local.heartrunning;
 
+import java.io.OutputStream;
+
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.hardware.Camera;
 import android.view.Menu;
 import android.view.View;
@@ -42,12 +45,16 @@ public class RunningView extends Activity {
         
         // Create an instance of Camera
         mCamera = getCameraInstance();
-
+        
         // Create our Preview view and set it as the content of our activity.
         mPreview = new CameraPreview(this, mCamera);
         FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
         preview.addView(mPreview);
 
+    }
+    
+    public void processImage(Bitmap bitmap) {
+    	
     }
 
     @Override

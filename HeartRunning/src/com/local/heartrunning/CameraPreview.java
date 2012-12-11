@@ -1,18 +1,27 @@
 package com.local.heartrunning;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.ImageFormat;
+import android.graphics.Rect;
+import android.graphics.YuvImage;
 import android.hardware.Camera;
+import android.hardware.Camera.PreviewCallback;
+import android.hardware.Camera.Size;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 /** A basic Camera preview class */
-public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
+public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback, PreviewCallback {
     private SurfaceHolder mHolder;
     private Camera mCamera;
     private static String TAG = "HR-CAM";
+    private RunningView rv;
 
     @SuppressWarnings("deprecation")
 	public CameraPreview(Context context, Camera camera) {
@@ -69,4 +78,24 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
             Log.d(TAG, "Error starting camera preview: " + e.getMessage());
         }
     }
+    
+    // I apologies for the horrible self reference here, feel free to 
+    // do this in a better way if you can think of one - AG
+    public void linkParent(RunningView rv) {
+    	this.rv = rv;
+    }
+
+	public void onPreviewFrame(byte[] imageData, Camera arg1) {
+		Size ps = mCamera.getParameters().getPreviewSize();
+		YuvImage image = new YuvImage(imageData,ImageFormat.YV12,ps.width,ps.height, null);
+		// TODO - Look into getting the camera to give a native BMP format, available on some phones, will need code
+		// to do both.
+		
+		// Explains the following - http://stackoverflow.com/questions/7794307/getting-image-from-surfaceview-to-imageview
+		// Some tricks to speed things up = http://kfb-android.blogspot.co.uk/2009/04/image-processing-in-android.html
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		image.compressToJpeg(new Rect(0,0,ps.width,ps.height), 50, out);
+		Bitmap bitmap = BitmapFactory.decodeByteArray(out.toByteArray(), 0, out.size());
+		rv.processImage(bitmap); // Pass it up to the parent processing method
+	}
 }
