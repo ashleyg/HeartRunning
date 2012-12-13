@@ -12,6 +12,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.hardware.Camera;
+import android.hardware.Camera.Parameters;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -61,6 +62,11 @@ public class RunningView extends Activity {
         
         // Create an instance of Camera
         mCamera = getCameraInstance();
+        // The following turns the flash on
+        Parameters p = mCamera.getParameters();
+        p.setFlashMode(Parameters.FLASH_MODE_TORCH);
+        mCamera.setParameters(p);
+
         
         // Create our Preview view and set it as the content of our activity.
         mPreview = new CameraPreview(this, mCamera);

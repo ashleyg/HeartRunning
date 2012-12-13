@@ -1,5 +1,10 @@
 package com.local.heartrunning;
 
+/**
+ * Draw the graph of the heart rate
+ * @author Ashley Griffiths
+ *
+ */
 import java.util.ArrayList;
 
 import android.content.Context;
@@ -68,7 +73,31 @@ public class GraphView extends View {
 		if(currentPoint > pointsToDraw) {
 			currentPoint = 0;
 			mCanvas.drawRect(new Rect(0,0,mBitmap.getWidth(),mBitmap.getHeight()), new Paint(Color.TRANSPARENT));
+			updateDrawingStats();
 		}
+	}
+	
+	private void updateDrawingStats() {
+		// This stops things breaking if we rotate
+		if(data.size() > pointsToDraw) {
+			max = 0;
+			min = 1000000000;
+			
+			for(int i=data.size()-(pointsToDraw);i<data.size();i++) {
+				max = Math.max(max, data.get(i));
+				min = Math.min(min,data.get(i));
+			}
+			delta = max-min;
+	        heightPerPoint = (float)mBitmap.getHeight()/(float)delta;
+		}
+	}
+	
+	private int getNewMidpoint() {
+		int total = 0;
+		for(int i=data.size()-(pointsToDraw);i<data.size();i++) {
+			total += data.get(i);
+		}
+		return total/pointsToDraw;
 	}
 
      @Override
