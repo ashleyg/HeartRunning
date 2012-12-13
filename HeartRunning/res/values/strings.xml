@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <string name="app_name">HeartRunning</string>
     <string name="hello_world">Hello world!</string>
@@ -11,6 +11,6 @@
     <string name="title_activity_running_view">RunningView</string>
     <string name="title_activity_post_run_view">PostRunView</string>
     <string name="button_finish_run">Finish Run</string>
-    <string name="app_id">507710032584613</string>
+    <string name="app_id" tools:ignore="MissingTranslation">507710032584613</string>
     
 </resources>

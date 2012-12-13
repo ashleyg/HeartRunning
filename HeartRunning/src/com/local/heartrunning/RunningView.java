@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class RunningView extends Activity {
@@ -24,6 +25,7 @@ public class RunningView extends Activity {
 	// GUI Components
 	Button finishRunningButton;
 	TextView hrText;
+	RelativeLayout graph;
 	
 	// Other stuff
 	GPSManager gps;
@@ -48,6 +50,10 @@ public class RunningView extends Activity {
 		});
         
         hrText = (TextView)findViewById(R.id.hrText);
+        graph = (RelativeLayout)findViewById(R.id.heart_rate_graph);
+        
+        GraphView gv = new GraphView(this);
+        graph.addView(gv);
         
         // Create an instance of Camera
         mCamera = getCameraInstance();
