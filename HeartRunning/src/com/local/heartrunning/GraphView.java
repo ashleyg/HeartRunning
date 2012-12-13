@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -41,6 +42,7 @@ public class GraphView extends View {
          super.onSizeChanged(w, h, oldw, oldh);
          mBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
          mCanvas = new Canvas(mBitmap);
+         mCanvas.drawRect(new Rect(0,0,mBitmap.getWidth(),mBitmap.getHeight()), new Paint(Color.TRANSPARENT));
          
          widthPerPoint = w/pointsToDraw;
          heightPerPoint = (float)h/(float)delta;
@@ -63,8 +65,10 @@ public class GraphView extends View {
 			mCanvas.drawLine(sX,sY,eX,eY,mPaint);
 		}
 		currentPoint++;
-		if(currentPoint > pointsToDraw)
+		if(currentPoint > pointsToDraw) {
 			currentPoint = 0;
+			mCanvas.drawRect(new Rect(0,0,mBitmap.getWidth(),mBitmap.getHeight()), new Paint(Color.TRANSPARENT));
+		}
 	}
 
      @Override
