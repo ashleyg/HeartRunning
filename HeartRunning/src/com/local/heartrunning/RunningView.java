@@ -1,6 +1,7 @@
 package com.local.heartrunning;
 
 import java.io.OutputStream;
+import java.util.ArrayList;
 
 import android.os.Bundle;
 import android.app.Activity;
@@ -28,15 +29,20 @@ public class RunningView extends Activity {
 	GraphView graph;
 	
 	// Other stuff
-	GPSManager gps;
-	
+	GPSManager gps;	
 	private Camera mCamera;
     private CameraPreview mPreview;
+    
+    // Data
+    ArrayList<Integer> data;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.running_view);
+        
+        // Initialize the data
+        data = new ArrayList<Integer>();
         
         // Initialize the GPS view
         gps = new GPSManager(this);
@@ -50,7 +56,8 @@ public class RunningView extends Activity {
 		});
         
         hrText = (TextView)findViewById(R.id.hrText);
-        graph = (GraphView)findViewById(R.id.hear_rate_graph);
+        graph = (GraphView)findViewById(R.id.heart_rate_graph);
+        graph.linkData(data);
         
         // Create an instance of Camera
         mCamera = getCameraInstance();
@@ -59,8 +66,7 @@ public class RunningView extends Activity {
         mPreview = new CameraPreview(this, mCamera);
         mPreview.linkParent(this);
         FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
-        preview.addView(mPreview);
-
+        preview.addView(mPreview);  
     }
     
     //public void processImage(Bitmap bitmap) {
@@ -77,9 +83,12 @@ public class RunningView extends Activity {
     		total += (int)imageData[x];
     	}
     	
-    	double avgBrightness = total / (width*height);
+    	//double avgBrightness = total / (width*height);
+    	int avgBrightness = total;
     	hrText.setText(avgBrightness+" bpm");
     	Log.d("BPM",""+avgBrightness);
+    	data.add(Integer.valueOf(avgBrightness));
+    	graph.invalidate();
     }
 
     @Override
