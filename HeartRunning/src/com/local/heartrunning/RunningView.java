@@ -25,7 +25,7 @@ public class RunningView extends Activity {
 	// GUI Components
 	Button finishRunningButton;
 	TextView hrText;
-	RelativeLayout graph;
+	GraphView graph;
 	
 	// Other stuff
 	GPSManager gps;
@@ -50,10 +50,7 @@ public class RunningView extends Activity {
 		});
         
         hrText = (TextView)findViewById(R.id.hrText);
-        graph = (RelativeLayout)findViewById(R.id.heart_rate_graph);
-        
-        GraphView gv = new GraphView(this);
-        graph.addView(gv);
+        graph = (GraphView)findViewById(R.id.hear_rate_graph);
         
         // Create an instance of Camera
         mCamera = getCameraInstance();

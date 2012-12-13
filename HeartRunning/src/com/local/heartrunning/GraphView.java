@@ -5,18 +5,29 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 
 public class GraphView extends View {
 
+	
+
 	Bitmap mBitmap;
 	Canvas mCanvas;
 	Paint 	mPaint = new Paint(Paint.DITHER_FLAG);
+	
+	
+	public GraphView(Context context, AttributeSet attrs) {
+		super(context, attrs);
+		mPaint.setColor(Color.WHITE);
+	}
+	/*
 	public GraphView(Context context) {
 		super(context);
-		mPaint.setColor(Color.WHITE);		
+				
 	}
+	*/
 	
 	@Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
