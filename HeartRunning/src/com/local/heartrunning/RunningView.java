@@ -129,7 +129,8 @@ public class RunningView extends Activity {
 	    		}
 	    		oldI = i;
 	    	}
-	    	float bpm = totalDiff/peaks.size();
+	    	float bpmillisecond = totalDiff/peaks.size();
+	    	float bpm = bpmillisecond/(1000*60);
 	    	hrText.setText(bpm+" bpm");
 	    	Log.d("BPM",""+bpm);
     	}
