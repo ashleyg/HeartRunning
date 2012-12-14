@@ -91,10 +91,48 @@ public class RunningView extends Activity {
     	
     	//double avgBrightness = total / (width*height);
     	int avgBrightness = total;
-    	hrText.setText(avgBrightness+" bpm");
-    	Log.d("BPM",""+avgBrightness);
+    	//hrText.setText(avgBrightness+" bpm");
+    	//Log.d("BPM",""+avgBrightness);
     	data.add(Integer.valueOf(avgBrightness));
     	graph.invalidate();
+    	calculateBPM();
+    }
+    
+    public void calculateBPM() {
+    	if(data.size() > 51) {  
+    		ArrayList<Integer> peaks = new ArrayList<Integer>();
+	    	boolean goingUp = false;
+	    	for(int i=data.size() - 50; i<data.size()-1; i++) {
+	    		//Store the area variables for convenience
+	    		int cur = data.get(i);
+	    		int prev = data.get(i-1);
+	    		int next = data.get(i+1);
+	    		
+	    		//We're going up
+	    		if(cur > prev) {
+	    			goingUp = true;
+	    		}
+	    		
+	    		//We're at a peak???
+	    		if(goingUp && next < cur) {
+	    			goingUp = false;
+	    			peaks.add(Integer.valueOf(i));
+	    		}
+	    	}
+	    	
+	    	//Now calculate the average time period between peaks
+	    	Integer oldI = null;
+	    	int totalDiff = 0;
+	    	for(Integer i : peaks) {
+	    		if(oldI != null) {
+	    			totalDiff += (i-oldI);
+	    		}
+	    		oldI = i;
+	    	}
+	    	float bpm = totalDiff/peaks.size();
+	    	hrText.setText(bpm+" bpm");
+	    	Log.d("BPM",""+bpm);
+    	}
     }
 
     @Override
