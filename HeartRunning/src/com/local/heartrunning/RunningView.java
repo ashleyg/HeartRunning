@@ -37,6 +37,8 @@ public class RunningView extends Activity {
     // Data
     ArrayList<DataPoint> data;
     
+    int runningAverage = -1;
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,33 +93,49 @@ public class RunningView extends Activity {
     	
     	//double avgBrightness = total / (width*height);
     	int avgBrightness = total;
+    	
+    	//Update the running average
+    	if(this.runningAverage == -1) {
+    		this.runningAverage = avgBrightness;
+    	} else {
+    		long tmpRA = data.size() * this.runningAverage;
+    		tmpRA += avgBrightness;
+        	this.runningAverage = (int) (tmpRA / (data.size() + 1));	
+    	}
+    	Log.d("running",""+runningAverage);
+    	
     	//hrText.setText(avgBrightness+" bpm");
-    	//Log.d("BPM",""+avgBrightness);
+    	Log.d("avg",""+avgBrightness);
     	data.add(new DataPoint(null, avgBrightness));
     	graph.invalidate();
     	calculateBPM();
     }
     
+    public int getSmoothedPoint(int index) {
+    	int smoothingRange = 2;
+    	int total = 0;
+    	for(int i=index-smoothingRange; i<index+smoothingRange; i++) {
+    		total = data.get(i).getBrightness();
+    	}
+    	return Math.round((float)total/(2*smoothingRange+1));
+    }
+    
     public void calculateBPM() {
-    	if(data.size() > 51) {  
+    	if(data.size() > 55) {  
     		ArrayList<DataPoint> peaks = new ArrayList<DataPoint>();
 	    	boolean goingUp = false;
-	    	for(int i=data.size() - 50; i<data.size()-1; i++) {
+	    	for(int i=data.size() - 50; i<data.size()-3; i++) {
 	    		//Store the area variables for convenience
 	    		int cur = data.get(i).getBrightness();
 	    		int prev = data.get(i-1).getBrightness();
 	    		int next = data.get(i+1).getBrightness();
 	    		
 	    		//We're going up
-	    		if(cur > prev) {
-	    			goingUp = true;
-	    		}
-	    		
-	    		//We're at a peak???
-	    		if(goingUp && next < cur) {
-	    			goingUp = false;
-	    			peaks.add(data.get(i));
-	    		}
+	    		//if(cur > (this.runningAverage*1.5)) {
+		    		if(cur < prev & cur < next) {
+		    			peaks.add(data.get(i));
+		    		}
+	    		//}
 	    	}
 	    	
 	    	//Now calculate the average time period between peaks
@@ -129,10 +147,17 @@ public class RunningView extends Activity {
 	    		}
 	    		oldI = i;
 	    	}
-	    	float bpmillisecond = totalDiff/peaks.size();
+	    	
+	    	float bpmillisecond;
+	    	if(peaks.size() > 0) {
+	    		bpmillisecond = totalDiff/peaks.size();
+	    	} else {
+	    		bpmillisecond = 1;
+	    	}
 	    	float bpm = bpmillisecond/(1000*60);
 	    	hrText.setText(bpm+" bpm");
 	    	Log.d("BPM",""+bpm);
+	    	graph.drawPeaks(peaks);
     	}
     }
 

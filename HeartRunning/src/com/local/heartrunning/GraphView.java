@@ -77,6 +77,12 @@ public class GraphView extends View {
 		}
 	}
 	
+	public void drawPeaks(ArrayList<DataPoint> peaks) {
+		for(DataPoint dp : peaks) {
+			mCanvas.drawLine(0, getGraphHeight(dp.getBrightness()), mCanvas.getWidth(), getGraphHeight(dp.getBrightness()), mPaint );
+		}
+	}
+	
 	private void updateDrawingStats() {
 		// This stops things breaking if we rotate
 		if(data.size() > pointsToDraw) {
