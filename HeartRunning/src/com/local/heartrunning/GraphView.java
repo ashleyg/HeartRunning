@@ -31,14 +31,14 @@ public class GraphView extends View {
 	float widthPerPoint;
 	float heightPerPoint;
 	
-	ArrayList<Integer> data;	
+	ArrayList<DataPoint> data;	
 	
 	public GraphView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		mPaint.setColor(Color.GREEN);
 	}
 	
-	public void linkData(ArrayList<Integer> data) {
+	public void linkData(ArrayList<DataPoint> data) {
 		this.data = data;
 	}
 	
@@ -63,9 +63,9 @@ public class GraphView extends View {
 	private void updateGraph() {
 		if(currentPoint > 0 && data.size() >= 2) {
 			int sX = (int) ((currentPoint-1)*widthPerPoint);
-			int sY = getGraphHeight(data.get(data.size()-2));
+			int sY = getGraphHeight(data.get(data.size()-2).getBrightness());
 			int eX = (int) (currentPoint*widthPerPoint);
-			int eY = getGraphHeight(data.get(data.size()-1));
+			int eY = getGraphHeight(data.get(data.size()-1).getBrightness());
 			Log.d("G","HPP: "+heightPerPoint+ " sY: "+sY+" eY: "+eY);
 			mCanvas.drawLine(sX,sY,eX,eY,mPaint);
 		}
@@ -84,8 +84,8 @@ public class GraphView extends View {
 			min = 1000000000;
 			
 			for(int i=data.size()-(pointsToDraw);i<data.size();i++) {
-				max = Math.max(max, data.get(i));
-				min = Math.min(min,data.get(i));
+				max = Math.max(max, data.get(i).getBrightness());
+				min = Math.min(min,data.get(i).getBrightness());
 			}
 			delta = max-min;
 	        heightPerPoint = (float)mBitmap.getHeight()/(float)delta;
@@ -95,7 +95,7 @@ public class GraphView extends View {
 	private int getNewMidpoint() {
 		int total = 0;
 		for(int i=data.size()-(pointsToDraw);i<data.size();i++) {
-			total += data.get(i);
+			total += data.get(i).getBrightness();
 		}
 		return total/pointsToDraw;
 	}

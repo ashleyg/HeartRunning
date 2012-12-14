@@ -35,7 +35,7 @@ public class RunningView extends Activity {
     private CameraPreview mPreview;
     
     // Data
-    ArrayList<Integer> data;
+    ArrayList<DataPoint> data;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,7 +43,7 @@ public class RunningView extends Activity {
         setContentView(R.layout.running_view);
         
         // Initialize the data
-        data = new ArrayList<Integer>();
+        data = new ArrayList<DataPoint>();
         
         // Initialize the GPS view
         gps = new GPSManager(this);
@@ -93,20 +93,20 @@ public class RunningView extends Activity {
     	int avgBrightness = total;
     	//hrText.setText(avgBrightness+" bpm");
     	//Log.d("BPM",""+avgBrightness);
-    	data.add(Integer.valueOf(avgBrightness));
+    	data.add(new DataPoint(null, avgBrightness));
     	graph.invalidate();
     	calculateBPM();
     }
     
     public void calculateBPM() {
     	if(data.size() > 51) {  
-    		ArrayList<Integer> peaks = new ArrayList<Integer>();
+    		ArrayList<DataPoint> peaks = new ArrayList<DataPoint>();
 	    	boolean goingUp = false;
 	    	for(int i=data.size() - 50; i<data.size()-1; i++) {
 	    		//Store the area variables for convenience
-	    		int cur = data.get(i);
-	    		int prev = data.get(i-1);
-	    		int next = data.get(i+1);
+	    		int cur = data.get(i).getBrightness();
+	    		int prev = data.get(i-1).getBrightness();
+	    		int next = data.get(i+1).getBrightness();
 	    		
 	    		//We're going up
 	    		if(cur > prev) {
@@ -116,16 +116,16 @@ public class RunningView extends Activity {
 	    		//We're at a peak???
 	    		if(goingUp && next < cur) {
 	    			goingUp = false;
-	    			peaks.add(Integer.valueOf(i));
+	    			peaks.add(data.get(i));
 	    		}
 	    	}
 	    	
 	    	//Now calculate the average time period between peaks
-	    	Integer oldI = null;
+	    	DataPoint oldI = null;
 	    	int totalDiff = 0;
-	    	for(Integer i : peaks) {
+	    	for(DataPoint i : peaks) {
 	    		if(oldI != null) {
-	    			totalDiff += (i-oldI);
+	    			totalDiff += (i.getTime()-oldI.getTime());
 	    		}
 	    		oldI = i;
 	    	}
