@@ -121,10 +121,11 @@ public class RunningView extends Activity {
     }
     
     public void calculateBPM() {
-    	if(data.size() > 55) {  
+    	int area = 6;
+    	if(data.size() > 50 + area) {  
     		ArrayList<DataPoint> peaks = new ArrayList<DataPoint>();
 	    	boolean goingUp = false;
-	    	for(int i=data.size() - 50; i<data.size()-3; i++) {
+	    	for(int i=data.size() - 50; i<data.size()-area; i++) {
 	    		//Store the area variables for convenience
 	    		int cur = data.get(i).getBrightness();
 	    		int prev = data.get(i-1).getBrightness();
@@ -132,10 +133,22 @@ public class RunningView extends Activity {
 	    		
 	    		//We're going up
 	    		//if(cur > (this.runningAverage*1.5)) {
-		    		if(cur < prev & cur < next) {
-		    			peaks.add(data.get(i));
-		    		}
+		    		//if(cur > prev && cur > next) {
+		    			//peaks.add(data.get(i));
+		    		//}
 	    		//}
+		    		
+		    	boolean peak = true;
+		    	
+		    	for(int j=i-area;j<i+area;j++) {
+		    		if(cur > data.get(j).getBrightness()) {
+		    			peak = false;
+		    			break;
+		    		}
+		    	}
+		    	if(peak) {
+		    		peaks.add(data.get(i));
+		    	}
 	    	}
 	    	
 	    	//Now calculate the average time period between peaks
