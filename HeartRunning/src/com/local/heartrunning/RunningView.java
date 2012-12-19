@@ -131,15 +131,8 @@ public class RunningView extends Activity {
 	    		int prev = data.get(i-1).getBrightness();
 	    		int next = data.get(i+1).getBrightness();
 	    		
-	    		//We're going up
-	    		//if(cur > (this.runningAverage*1.5)) {
-		    		//if(cur > prev && cur > next) {
-		    			//peaks.add(data.get(i));
-		    		//}
-	    		//}
-		    		
+	    		//Search the surrounding area
 		    	boolean peak = true;
-		    	
 		    	for(int j=i-area;j<i+area;j++) {
 		    		if(cur > data.get(j).getBrightness()) {
 		    			peak = false;
@@ -151,23 +144,14 @@ public class RunningView extends Activity {
 		    	}
 	    	}
 	    	
-	    	//Now calculate the average time period between peaks
-	    	DataPoint oldI = null;
-	    	int totalDiff = 0;
-	    	for(DataPoint i : peaks) {
-	    		if(oldI != null) {
-	    			totalDiff += (i.getTime()-oldI.getTime());
-	    		}
-	    		oldI = i;
-	    	}
+	    	// Now we calcualte the beat timing
+	    	float timeDelta = (float)(peaks.get(peaks.size()-1).getTime()-peaks.get(0).getTime()); 
+	    	float tpb = timeDelta/(float)peaks.size(); //Time in milliseconds per beat
 	    	
-	    	float bpmillisecond;
-	    	if(peaks.size() > 0) {
-	    		bpmillisecond = totalDiff/peaks.size();
-	    	} else {
-	    		bpmillisecond = 1;
-	    	}
-	    	float bpm = bpmillisecond/(1000*60);
+	    	//Calcualte BPM
+	    	//(1 minute in milliseconds) / time per beat
+	    	float bpm = (1000*60)/tpb;
+	    	
 	    	hrText.setText(bpm+" bpm");
 	    	Log.d("BPM",""+bpm);
 	    	graph.drawPeaks(peaks);
