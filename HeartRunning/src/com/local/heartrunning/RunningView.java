@@ -49,6 +49,7 @@ public class RunningView extends Activity {
         
         // Initialize the GPS view
         gps = new GPSManager(this);
+        gps.linkRunnignView(this);
         
         // Load GUI Components
         finishRunningButton = (Button)findViewById(R.id.button_finish_run);
@@ -106,7 +107,7 @@ public class RunningView extends Activity {
     	
     	//hrText.setText(avgBrightness+" bpm");
     	Log.d("avg",""+avgBrightness);
-    	data.add(new DataPoint(null, avgBrightness));
+    	data.add(new DataPoint(avgBrightness));
     	graph.invalidate();
     	calculateBPM();
     }
@@ -120,7 +121,7 @@ public class RunningView extends Activity {
     	return Math.round((float)total/(2*smoothingRange+1));
     }
     
-    public void calculateBPM() {
+    public float calculateBPM() {
     	int area = 6;
     	if(data.size() > 50 + area) {  
     		ArrayList<DataPoint> peaks = new ArrayList<DataPoint>();
@@ -144,18 +145,20 @@ public class RunningView extends Activity {
 		    	}
 	    	}
 	    	
-	    	// Now we calcualte the beat timing
+	    	// Now we calculate the beat timing
 	    	float timeDelta = (float)(peaks.get(peaks.size()-1).getTime()-peaks.get(0).getTime()); 
 	    	float tpb = timeDelta/(float)peaks.size(); //Time in milliseconds per beat
 	    	
-	    	//Calcualte BPM
+	    	//Calculate BPM
 	    	//(1 minute in milliseconds) / time per beat
 	    	float bpm = (1000*60)/tpb;
 	    	
 	    	hrText.setText(bpm+" bpm");
 	    	Log.d("BPM",""+bpm);
 	    	graph.drawPeaks(peaks);
+	    	return bpm;
     	}
+    	return -1.0f; //Just in case
     }
 
     @Override

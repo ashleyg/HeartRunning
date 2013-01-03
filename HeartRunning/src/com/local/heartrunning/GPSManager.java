@@ -19,8 +19,10 @@ public class GPSManager {
 	private LocationManager locationManager;
 	private LocationListener locationListener;
 	
-	private ArrayList<DataPoint> dataPoints;
+	private ArrayList<MapDataPoint> mapDataPoints;
 	private static final String debugTag = "GPS";
+	
+	private RunningView parent;
 
 	/**
 	 * Constructor
@@ -49,7 +51,7 @@ public class GPSManager {
 		
 		// Register the listener with the Location Manager to receive location updates
 		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, locationListener);
-		dataPoints = new ArrayList<DataPoint>();
+		mapDataPoints = new ArrayList<MapDataPoint>();
 	}
 	
 	//Stop getting location updates
@@ -57,12 +59,16 @@ public class GPSManager {
 		locationManager.removeUpdates(locationListener);
 	}
 	
-	protected void newLocation(Location location) {
-		dataPoints.add(new DataPoint(location,0));
-		Log.i(debugTag, String.valueOf(dataPoints.size()));
+	public void linkRunnignView(RunningView parent) {
+		this.parent = parent;
 	}
 	
-	public ArrayList<DataPoint> getDataPoints() {
-		return dataPoints;
+	protected void newLocation(Location location) {
+		mapDataPoints.add(new MapDataPoint(location,parent.calculateBPM()));
+		Log.i(debugTag, String.valueOf(mapDataPoints.size()));
+	}
+	
+	public ArrayList<MapDataPoint> getMapDataPoints() {
+		return mapDataPoints;
 	}
 }
