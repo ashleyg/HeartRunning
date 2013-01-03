@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class MainMenu extends Activity {
 
@@ -25,6 +26,12 @@ public class MainMenu extends Activity {
 				loadStartRunning();			
 			}
 		});
+        
+        if (MainActivity.facebookUser != null) {
+        	TextView welcome = (TextView) findViewById(R.id.textView1);
+        	welcome.setText("Let's get going, " + MainActivity.facebookUser.getName() + "!");
+        }
+
     }
 
     @Override

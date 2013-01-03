@@ -12,11 +12,15 @@ import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class MainActivity extends FacebookActivity {
 
 	// GUI Components
 	Button loginButton;
+	
+	
+	public static GraphUser facebookUser;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,8 +55,7 @@ public class MainActivity extends FacebookActivity {
 		        @Override
 		        public void onCompleted(GraphUser user, Response response) {
 		          if (user != null) {
-	//    	            TextView welcome = (TextView) findViewById(R.id.welcome);
-	//    	            welcome.setText("Hello " + user.getName() + "!");
+		        	  	facebookUser = user;
 		          }
 		        }
 		      }

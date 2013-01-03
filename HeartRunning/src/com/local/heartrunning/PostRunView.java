@@ -1,10 +1,8 @@
 package com.local.heartrunning;
 
 import com.google.android.maps.MapActivity;
-import com.google.android.maps.MapView;
 
 import android.os.Bundle;
-import android.app.Activity;
 import android.view.Menu;
 
 public class PostRunView extends MapActivity {
