@@ -19,7 +19,7 @@ public class MainActivity extends FacebookActivity {
 	// GUI Components
 	Button loginButton;
 	
-	
+	//Make it accessible everywhere
 	public static GraphUser facebookUser;
 	
     @Override

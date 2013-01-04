@@ -30,6 +30,7 @@ public class RunningView extends Activity {
 	GraphView graph;
 	
 	// Other stuff
+	//A very hacky way to make data visible to the next activity
 	public static GPSManager gps;	
 	private Camera mCamera;
     private CameraPreview mPreview;

@@ -3,10 +3,14 @@ package com.local.heartrunning;
 import java.util.ArrayList;
 
 import com.google.android.maps.MapActivity;
-import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapView;
 import android.os.Bundle;
 import android.view.Menu;
+
+/**
+ * Show the workout on a map
+ *
+ */
 
 public class PostRunView extends MapActivity {
 	
@@ -35,23 +39,27 @@ public class PostRunView extends MapActivity {
 		return false;
 	}
 	
+	/**
+	 * Draw the route of the activity on the map
+	 */
 	private void drawPath() {
 		ArrayList<MapDataPoint> dataPoints = RunningView.gps.getMapDataPoints();
-		GeoPoint[] points = new GeoPoint[dataPoints.size()];
-		
-		int i = 0;
-		for (MapDataPoint m : dataPoints) {
-			int latitude = (int) (m.getLocation().getLatitude() * 1E6);
-			int longitude = (int) (m.getLocation().getLongitude() * 1E6);
-			points[i] = new GeoPoint(latitude, longitude);
-			i++;
+
+		//Make sure we actually have data
+		if (!dataPoints.isEmpty()) {
+			//Set where the map is centred
+			if (dataPoints.get(0).hasLocationData()) {
+				mView.getController().setCenter(dataPoints.get(0).getLocationAsGeoPoint());
+			}
 		}
-		mView.getController().setCenter(points[0]);
+		//An acceptable zoom level
 		mView.getController().setZoom(15);
 		
-		for (i = 1; i < points.length; i++) {
-			mView.getOverlays().add(new OverlayPath(points[i-1], points[i]));
+		//Plot the path
+		for (int i = 1; i < dataPoints.size(); i++) {
+			mView.getOverlays().add(new OverlayPath(dataPoints.get(i-1), dataPoints.get(i)));
 		}
+		//Force a redraw
 		mView.invalidate();
 	}
 }
