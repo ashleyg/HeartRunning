@@ -1,8 +1,10 @@
 package com.local.heartrunning;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -37,8 +39,12 @@ public class RunningView extends Activity {
     
     // Data
     ArrayList<DataPoint> data;
-    
     int runningAverage = -1;
+    
+    
+    // Sound stuff
+    MediaPlayer mpRunFaster;
+    MediaPlayer mpRunSlower;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -76,7 +82,39 @@ public class RunningView extends Activity {
         mPreview = new CameraPreview(this, mCamera);
         mPreview.linkParent(this);
         FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
-        preview.addView(mPreview);  
+        preview.addView(mPreview);
+        
+        // Media player
+        mpRunFaster = MediaPlayer.create(this, R.raw.runfaster);
+        mpRunSlower = MediaPlayer.create(this, R.raw.runslower);
+        
+        //playRunFaster(); // might as well give some starting encouragment
+        mpRunFaster.start();
+    }
+    
+    public void playRunFaster() {
+    	
+    	mpRunFaster.reset();
+    	try {
+			mpRunFaster.prepare();
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    	mpRunFaster.start();
+    }
+    
+    public void playRunSlower() {
+    	mpRunSlower.reset();
+    	try {
+    		mpRunSlower.prepare();
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    	mpRunSlower.start();
     }
     
     //public void processImage(Bitmap bitmap) {
