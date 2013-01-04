@@ -29,7 +29,10 @@ public class GraphView extends View {
 	int delta = max-min;
 
 	float widthPerPoint;
+	float widthPerMillisecond;
 	float heightPerPoint;
+	
+	long milliseondsFirstDraw = 0; //The first millisecond drawn on to the graph at the current time
 	
 	ArrayList<DataPoint> data;	
 	
@@ -51,6 +54,7 @@ public class GraphView extends View {
          
          widthPerPoint = w/pointsToDraw;
          heightPerPoint = (float)h/(float)delta;
+         widthPerMillisecond = (float)w/5000.0f;
          
          //mCanvas.drawLine(0, 0, w, h, mPaint);
      }
@@ -60,20 +64,31 @@ public class GraphView extends View {
 		return (int) ((value-min)*heightPerPoint);
 	}
 	
+	private int getGraphWidth(long time) {
+		return (int) ((float)(time-milliseondsFirstDraw)*widthPerMillisecond);
+	}
+	
 	private void updateGraph() {
-		if(currentPoint > 0 && data.size() >= 2) {
-			int sX = (int) ((currentPoint-1)*widthPerPoint);
-			int sY = getGraphHeight(data.get(data.size()-2).getBrightness());
-			int eX = (int) (currentPoint*widthPerPoint);
-			int eY = getGraphHeight(data.get(data.size()-1).getBrightness());
-			Log.d("G","HPP: "+heightPerPoint+ " sY: "+sY+" eY: "+eY);
-			mCanvas.drawLine(sX,sY,eX,eY,mPaint);
-		}
-		currentPoint++;
-		if(currentPoint > pointsToDraw) {
-			currentPoint = 0;
-			mCanvas.drawRect(new Rect(0,0,mBitmap.getWidth(),mBitmap.getHeight()), new Paint(Color.TRANSPARENT));
-			updateDrawingStats();
+		int offset = 30;
+		// Offset it so we're working 30 datapoint behind.
+		// This should only affect the drawing not the actual bpm calculations
+		if(data.size() >= offset) {
+			if(currentPoint > 0 && data.size() >= offset+2) {
+				int sX = getGraphWidth(data.get(data.size()-2).getTime());
+				int sY = getGraphHeight(data.get(data.size()-2).getBrightness());
+				int eX = getGraphWidth(data.get(data.size()-1).getTime());
+				int eY = getGraphHeight(data.get(data.size()-1).getBrightness());
+				Log.d("G","WPP: "+widthPerMillisecond+ " sX: "+sX+" eX: "+eX);
+				Log.d("G","HPP: "+heightPerPoint+ " sY: "+sY+" eY: "+eY);
+				mCanvas.drawLine(sX,sY,eX,eY,mPaint);
+			}
+			currentPoint++;
+			if(currentPoint > pointsToDraw) {
+				currentPoint = 0;
+				milliseondsFirstDraw = data.get(data.size()-1).getTime();
+				mCanvas.drawRect(new Rect(0,0,mBitmap.getWidth(),mBitmap.getHeight()), new Paint(Color.TRANSPARENT));
+				updateDrawingStats();
+			}
 		}
 	}
 	
