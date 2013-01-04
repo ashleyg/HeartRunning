@@ -41,6 +41,8 @@ public class RunningView extends Activity {
     ArrayList<DataPoint> data;
     int runningAverage = -1;
     
+    float oldBPM = 70.0f;
+    
     
     // Sound stuff
     MediaPlayer mpRunFaster;
@@ -89,7 +91,7 @@ public class RunningView extends Activity {
         mpRunSlower = MediaPlayer.create(this, R.raw.runslower);
         
         //playRunFaster(); // might as well give some starting encouragment
-        mpRunFaster.start();
+        //mpRunFaster.start();
     }
     
     public void playRunFaster() {
@@ -184,18 +186,26 @@ public class RunningView extends Activity {
 		    	}
 	    	}
 	    	
-	    	// Now we calculate the beat timing
-	    	float timeDelta = (float)(peaks.get(peaks.size()-1).getTime()-peaks.get(0).getTime()); 
-	    	float tpb = timeDelta/(float)peaks.size(); //Time in milliseconds per beat
-	    	
-	    	//Calculate BPM
-	    	//(1 minute in milliseconds) / time per beat
-	    	float bpm = (1000*60)/tpb;
-	    	
-	    	hrText.setText(bpm+" bpm");
-	    	Log.d("BPM",""+bpm);
-	    	graph.drawPeaks(peaks);
-	    	return bpm;
+	    	try {
+		    	// Now we calculate the beat timing
+		    	float timeDelta = (float)(peaks.get(peaks.size()-1).getTime()-peaks.get(0).getTime()); 
+		    	float tpb = timeDelta/(float)peaks.size(); //Time in milliseconds per beat
+		    	
+		    	//Calculate BPM
+		    	//(1 minute in milliseconds) / time per beat
+		    	float bpm = (1000*60)/tpb;
+		    	
+		    	hrText.setText(bpm+" bpm");
+		    	Log.d("BPM",""+bpm);
+		    	graph.drawPeaks(peaks);
+		    	
+		    	oldBPM = bpm;
+		    	return bpm;
+	    	} catch (Exception e) {
+	    		// The GC seems to dump the peaks array whilst trying to read it causing random crashes.
+	    		// So it'll return the old value and will stop this happening hopefully!
+	    		return oldBPM; // Just in case
+	    	}
     	}
     	return -1.0f; //Just in case
     }
