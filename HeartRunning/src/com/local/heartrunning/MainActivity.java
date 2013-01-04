@@ -36,6 +36,9 @@ public class MainActivity extends FacebookActivity {
 			}
 		});
         this.openSession();
+        if (facebookUser != null) {
+        	loadMenu();
+        }
     }
 
     @Override
@@ -56,6 +59,7 @@ public class MainActivity extends FacebookActivity {
 		        public void onCompleted(GraphUser user, Response response) {
 		          if (user != null) {
 		        	  	facebookUser = user;
+		        	  	loadMenu();
 		          }
 		        }
 		      }

@@ -30,7 +30,7 @@ public class RunningView extends Activity {
 	GraphView graph;
 	
 	// Other stuff
-	GPSManager gps;	
+	public static GPSManager gps;	
 	private Camera mCamera;
     private CameraPreview mPreview;
     
