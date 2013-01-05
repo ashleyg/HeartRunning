@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <string name="app_name">HeartRunning</string>
@@ -13,5 +14,10 @@
     <string name="button_finish_run">Finish Run</string>
     <string name="app_id" tools:ignore="MissingTranslation">507710032584613</string>
     <string name="bpm_text">Wait...</string>
-    
+    <string name="title_activity_post_run_map_view">PostRunMapView</string>
+    <string name="goto_map">Map View</string>
+    <string name="distance_label">Distance:</string>
+    <string name="hr_label">Average Heart Rate:</string>
+    <string name="time_label">Time Taken:</string>
+
 </resources>

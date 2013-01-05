@@ -19,9 +19,6 @@ public class MainActivity extends FacebookActivity {
 	// GUI Components
 	Button loginButton;
 	
-	//Make it accessible everywhere
-	public static GraphUser facebookUser;
-	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,7 +33,7 @@ public class MainActivity extends FacebookActivity {
 			}
 		});
         this.openSession();
-        if (facebookUser != null) {
+        if (User.getInstance().getFacebook() != null) {
         	loadMenu();
         }
     }
@@ -58,8 +55,8 @@ public class MainActivity extends FacebookActivity {
 		        @Override
 		        public void onCompleted(GraphUser user, Response response) {
 		          if (user != null) {
-		        	  	facebookUser = user;
-		        	  	loadMenu();
+		        	  User.getInstance().addFacebook(user);
+		        	  loadMenu();
 		          }
 		        }
 		      }

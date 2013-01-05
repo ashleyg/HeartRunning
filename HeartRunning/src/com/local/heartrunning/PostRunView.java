@@ -1,65 +1,121 @@
 package com.local.heartrunning;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
-import com.google.android.maps.MapActivity;
-import com.google.android.maps.MapView;
 import android.os.Bundle;
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Intent;
 import android.view.Menu;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.TextView;
 
 /**
- * Show the workout on a map
+ * Displays information about the run for analysis...with SCIENCE
  *
  */
 
-public class PostRunView extends MapActivity {
+public class PostRunView extends Activity {
+
+	Button gotoMap;
 	
-	private MapView mView;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.post_run_view);
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.post_run_view);
+		// Load GUI Components
+        gotoMap = (Button)findViewById(R.id.goto_map);
         
-        mView = (MapView) findViewById(R.id.mapview);
-        mView.getOverlays().clear();
-        mView.setBuiltInZoomControls(true);
+        gotoMap.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				loadMap();			
+			}
+		});
         
-        drawPath();        
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.post_run_view, menu);
-        return true;
-    }
+        //Calculate and display the run data
+       	TextView distance = (TextView) findViewById(R.id.distance);
+        distance.setText(calculateDistance() + " km");
+        
+        TextView hr = (TextView) findViewById(R.id.hr);
+        hr.setText(calculateAvgHR());
+        
+        TextView time = (TextView) findViewById(R.id.time);
+        time.setText(calculateTime());
+        
+        
+	}
 
 	@Override
-	protected boolean isRouteDisplayed() {
-		return false;
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+//		getMenuInflater().inflate(R.menu.activity_post_run_map_view, menu);
+		return true;
 	}
 	
 	/**
-	 * Draw the route of the activity on the map
+	 * Load the map view
 	 */
-	private void drawPath() {
-		ArrayList<MapDataPoint> dataPoints = RunningView.gps.getMapDataPoints();
-
-		//Make sure we actually have data
-		if (!dataPoints.isEmpty()) {
-			//Set where the map is centred
-			if (dataPoints.get(0).hasLocationData()) {
-				mView.getController().setCenter(dataPoints.get(0).getLocationAsGeoPoint());
-			}
+	public void loadMap() {
+		Intent intentMapView = new Intent(this, PostRunMapView.class);
+        startActivity(intentMapView);	
+    }
+	
+	/**
+	 * Calculate the distance the person has ventured
+	 * @return the distance
+	 */
+	private String calculateDistance() {
+		float x = 0;
+		ArrayList<MapDataPoint> points = RunningView.gps.getMapDataPoints();
+		for (int i = 1; i < points.size(); i++) {
+			x += points.get(i-1).getLocation().distanceTo(points.get(i).getLocation());
 		}
-		//An acceptable zoom level
-		mView.getController().setZoom(15);
-		
-		//Plot the path
-		for (int i = 1; i < dataPoints.size(); i++) {
-			mView.getOverlays().add(new OverlayPath(dataPoints.get(i-1), dataPoints.get(i)));
-		}
-		//Force a redraw
-		mView.invalidate();
+		x /= 1000;
+		return String.format("%.2f", x);
 	}
+	
+	/**
+	 * Calculate the average HR of the person
+	 * @return the average HR, or "Unavailable"
+	 */
+	private String calculateAvgHR() {
+		float total = 0;
+		for (MapDataPoint p : RunningView.gps.getMapDataPoints()) {
+			total += p.getBPM();
+		}
+		total /= RunningView.gps.getMapDataPoints().size();
+		int beats = Math.round(total);
+		if (beats <= 0) {
+			return "Unavailable";
+		}
+		else {
+			return Integer.toString(beats) + " bpm";
+		}
+	}
+	
+	/**
+	 * Calculate the time spent on the run
+	 * @return time spent exercising
+	 */
+	@SuppressLint("NewApi")
+	private String calculateTime() {
+		long time = 0;
+		ArrayList<MapDataPoint> points = RunningView.gps.getMapDataPoints();
+		for (int i = 1; i < points.size(); i++) {
+			long previous = points.get(i-1).getTime();
+			long current = points.get(i).getTime();
+			time += (current-previous);
+		}
+		String s = String.format("%02d:%02d:%02d", 
+			    TimeUnit.MILLISECONDS.toHours(time),
+			    TimeUnit.MILLISECONDS.toMinutes(time) - 
+			    TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(time)),
+			    TimeUnit.MILLISECONDS.toSeconds(time) - 
+			    TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(time)));
+		return s;
+	}
+
 }

@@ -1,5 +1,7 @@
 package com.local.heartrunning;
 
+import java.util.Date;
+
 import com.google.android.maps.GeoPoint;
 
 import android.location.Location;
@@ -12,10 +14,12 @@ import android.location.Location;
 public class MapDataPoint {
 	Location location;
 	float bpm;
+	Date time;
 	
 	public MapDataPoint(Location location, float bpm) {
 		this.location = location;
 		this.bpm = bpm;
+		time = new Date(System.currentTimeMillis());
 	}
 	
 	public Location getLocation() {
@@ -30,6 +34,10 @@ public class MapDataPoint {
 		int latitude = (int) (location.getLatitude() * 1E6);
 		int longitude = (int) (location.getLongitude() * 1E6);
 		return new GeoPoint(latitude, longitude);
+	}
+	
+	public long getTime() {
+		return time.getTime();
 	}
 	
 	public boolean hasLocationData() {

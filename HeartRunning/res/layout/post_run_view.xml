@@ -1,14 +1,70 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp" >
 
-	<com.google.android.maps.MapView
-	    xmlns:android="http://schemas.android.com/apk/res/android"
-	    android:id="@+id/mapview"
-	    android:layout_width="fill_parent"
-	    android:layout_height="fill_parent"
-	    android:clickable="true"
-	    android:apiKey="0tH9CAxxoqA97nrxPL2VXa0p3gMnh3ggFenj-oA"
-	/>
+    <TextView
+        android:id="@+id/distance_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="34dp"
+        android:layout_alignParentLeft="true"
+        android:text="@string/distance_label"  />
+    
+    <TextView 
+        android:id="@+id/distance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/distance_label"
+        android:layout_marginTop="34dp"
+        android:layout_marginLeft="10dp"
+        android:layout_alignParentRight="true"  />
+    
+    <TextView
+        android:id="@+id/hr_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/distance_label"
+        android:layout_alignParentLeft="true"
+        android:text="@string/hr_label"  />
+    
+    <TextView 
+        android:id="@+id/hr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/distance_label"
+        android:layout_toRightOf="@+id/hr_label"
+        android:layout_marginLeft="10dp"
+        android:layout_alignParentRight="true" />
+    
+    <TextView
+        android:id="@+id/time_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/hr_label"
+        android:layout_alignParentLeft="true"
+        android:text="@string/time_label"  />
+    
+    <TextView 
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/hr_label"
+        android:layout_toRightOf="@+id/time_label"
+        android:layout_marginLeft="10dp"
+        android:layout_alignParentRight="true"  />
+
+    <Button
+        android:id="@+id/goto_map"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/hr_label"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:text="@string/goto_map" />
+
+
 </RelativeLayout>

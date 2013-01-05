@@ -27,9 +27,9 @@ public class MainMenu extends Activity {
 			}
 		});
         
-        if (MainActivity.facebookUser != null) {
+        if (User.getInstance().getFacebook() != null) {
         	TextView welcome = (TextView) findViewById(R.id.textView1);
-        	welcome.setText("Let's get going, " + MainActivity.facebookUser.getName() + "!");
+        	welcome.setText("Let's get going, " + User.getInstance().getFacebook().getFirstName() + "!");
         }
 
     }
