@@ -53,6 +53,8 @@ public class RunningView extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.running_view);
         
+        this.checkCameraHardware(this);
+        
         // Initialize the data
         data = new ArrayList<DataPoint>();
         
@@ -64,7 +66,7 @@ public class RunningView extends Activity {
         finishRunningButton = (Button)findViewById(R.id.button_finish_run);
         finishRunningButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				stopRuning();
+				stopRunning();
 			}
 		});
         
@@ -95,7 +97,7 @@ public class RunningView extends Activity {
     }
     
     public void playRunFaster() {
-    	
+    	/*
     	mpRunFaster.reset();
     	try {
 			mpRunFaster.prepare();
@@ -104,10 +106,12 @@ public class RunningView extends Activity {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		*/
     	mpRunFaster.start();
     }
     
     public void playRunSlower() {
+    	/*
     	mpRunSlower.reset();
     	try {
     		mpRunSlower.prepare();
@@ -116,6 +120,7 @@ public class RunningView extends Activity {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		*/
     	mpRunSlower.start();
     }
     
@@ -150,7 +155,10 @@ public class RunningView extends Activity {
     	Log.d("avg",""+avgBrightness);
     	data.add(new DataPoint(avgBrightness));
     	graph.invalidate();
-    	calculateBPM();
+    	
+    	
+    	float rBPM = calculateBPM();
+    	
     }
     
     public int getSmoothedPoint(int index) {
@@ -164,10 +172,11 @@ public class RunningView extends Activity {
     
     public float calculateBPM() {
     	int area = 6;
-    	if(data.size() > 50 + area) {  
+    	int wait = 200;
+    	if(data.size() > wait + area) {  
     		ArrayList<DataPoint> peaks = new ArrayList<DataPoint>();
 	    	boolean goingUp = false;
-	    	for(int i=data.size() - 50; i<data.size()-area; i++) {
+	    	for(int i=data.size() - wait; i<data.size()-area; i++) {
 	    		//Store the area variables for convenience
 	    		int cur = data.get(i).getBrightness();
 	    		int prev = data.get(i-1).getBrightness();
@@ -216,7 +225,7 @@ public class RunningView extends Activity {
         return true;
     }
     
-    public void stopRuning() {
+    public void stopRunning() {
     	Intent intentStopRunning = new Intent(this,PostRunView.class);
     	startActivity(intentStopRunning);
     }
@@ -232,12 +241,10 @@ public class RunningView extends Activity {
             */
             return true;
         } else {
-        	/*
             AlertDialog.Builder b = new AlertDialog.Builder(context);
-            b.setMessage("Sorry this has no camera");
+            b.setMessage("Sorry! It appears you don't have a camera. It is unlikely this app will work for you.");
             AlertDialog a = b.create();
             a.show();
-            */
             return false;
         }
     }
