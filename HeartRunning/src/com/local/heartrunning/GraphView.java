@@ -78,8 +78,8 @@ public class GraphView extends View {
 				int sY = getGraphHeight(data.get(data.size()-2).getBrightness());
 				int eX = getGraphWidth(data.get(data.size()-1).getTime());
 				int eY = getGraphHeight(data.get(data.size()-1).getBrightness());
-				Log.d("G","WPP: "+widthPerMillisecond+ " sX: "+sX+" eX: "+eX);
-				Log.d("G","HPP: "+heightPerPoint+ " sY: "+sY+" eY: "+eY);
+				//Log.d("G","WPP: "+widthPerMillisecond+ " sX: "+sX+" eX: "+eX);
+				//Log.d("G","HPP: "+heightPerPoint+ " sY: "+sY+" eY: "+eY);
 				mCanvas.drawLine(sX,sY,eX,eY,mPaint);
 			}
 			currentPoint++;

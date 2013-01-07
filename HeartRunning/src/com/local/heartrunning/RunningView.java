@@ -149,10 +149,10 @@ public class RunningView extends Activity {
     		tmpRA += avgBrightness;
         	this.runningAverage = (int) (tmpRA / (data.size() + 1));	
     	}
-    	Log.d("running",""+runningAverage);
+    	//Log.d("running",""+runningAverage);
     	
     	//hrText.setText(avgBrightness+" bpm");
-    	Log.d("avg",""+avgBrightness);
+    	//Log.d("avg",""+avgBrightness);
     	data.add(new DataPoint(avgBrightness));
     	graph.invalidate();
     	
@@ -204,9 +204,13 @@ public class RunningView extends Activity {
 		    	//(1 minute in milliseconds) / time per beat
 		    	float bpm = (1000*60)/tpb;
 		    	
-		    	hrText.setText(bpm+" bpm");
-		    	Log.d("BPM",""+bpm);
-		    	graph.drawPeaks(peaks);
+		    	bpm -= 10.0f; // Tuning parameter
+		    	bpm = Math.max(1, bpm);
+		    	
+		    	
+		    	hrText.setText(Math.round(bpm)+" bpm");
+		    	//Log.d("BPM",""+bpm);
+		    	//graph.drawPeaks(peaks);
 		    	
 		    	oldBPM = bpm;
 		    	return bpm;
