@@ -102,19 +102,14 @@ public class PostRunView extends Activity {
 	 */
 	@SuppressLint("NewApi")
 	private String calculateTime() {
-		long time = 0;
 		ArrayList<MapDataPoint> points = RunningView.gps.getMapDataPoints();
-		for (int i = 1; i < points.size(); i++) {
-			long previous = points.get(i-1).getTime();
-			long current = points.get(i).getTime();
-			time += (current-previous);
-		}
-		String s = String.format("%02d:%02d:%02d", 
-			    TimeUnit.MILLISECONDS.toHours(time),
-			    TimeUnit.MILLISECONDS.toMinutes(time) - 
-			    TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(time)),
-			    TimeUnit.MILLISECONDS.toSeconds(time) - 
-			    TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(time)));
+		long time = points.get(points.size()-1).getTime() - points.get(0).getTime();
+		
+		long hours = time/(1000*60*60);
+		long minutes = (time - (hours*1000*60*60)) / (1000*60);
+		long seconds = (time - (hours*1000*60*60) - (minutes*1000*60))/1000;
+		
+		String s = String.format("%02d:%02d:%02d", hours, minutes, seconds);
 		return s;
 	}
 
