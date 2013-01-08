@@ -103,14 +103,20 @@ public class PostRunView extends Activity {
 	@SuppressLint("NewApi")
 	private String calculateTime() {
 		ArrayList<MapDataPoint> points = RunningView.gps.getMapDataPoints();
-		long time = points.get(points.size()-1).getTime() - points.get(0).getTime();
+		if (points.size() > 1) {
+			long time = points.get(points.size()-1).getTime() - points.get(0).getTime();
+			
+			long hours = time/(1000*60*60);
+			long minutes = (time - (hours*1000*60*60)) / (1000*60);
+			long seconds = (time - (hours*1000*60*60) - (minutes*1000*60))/1000;
+			
+			String s = String.format("%02d:%02d:%02d", hours, minutes, seconds);
+			return s;
+		}
+		else {
+			return "0";
+		}
 		
-		long hours = time/(1000*60*60);
-		long minutes = (time - (hours*1000*60*60)) / (1000*60);
-		long seconds = (time - (hours*1000*60*60) - (minutes*1000*60))/1000;
-		
-		String s = String.format("%02d:%02d:%02d", hours, minutes, seconds);
-		return s;
 	}
 
 }
