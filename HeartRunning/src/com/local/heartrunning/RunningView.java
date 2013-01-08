@@ -176,6 +176,9 @@ public class RunningView extends Activity {
     	if(data.size() > wait + area) {  
     		ArrayList<DataPoint> peaks = new ArrayList<DataPoint>();
 	    	boolean goingUp = false;
+	    	
+	    	long tba = data.get(data.size()-wait).getTime()-data.get(data.size()-wait-area).getTime();
+	    	Log.d("BAH","TBA: "+tba);
 	    	for(int i=data.size() - wait; i<data.size()-area; i++) {
 	    		//Store the area variables for convenience
 	    		int cur = data.get(i).getBrightness();
@@ -208,7 +211,7 @@ public class RunningView extends Activity {
 		    	bpm = Math.max(1, bpm);
 		    	
 		    	
-		    	hrText.setText(Math.round(bpm)+" bpm");
+		    	hrText.setText(Math.round(bpm)+" bpm" + " TBA - "+tba);
 		    	//Log.d("BPM",""+bpm);
 		    	//graph.drawPeaks(peaks);
 		    	
