@@ -6,6 +6,9 @@ import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapView;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 
 /**
  * Show the workout on a map
@@ -25,7 +28,15 @@ public class PostRunMapView extends MapActivity {
         mView.getOverlays().clear();
         mView.setBuiltInZoomControls(true);
         
-        drawPath();        
+        Button back = (Button)findViewById(R.id.back);
+        
+        back.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				finish();
+			}
+		});
+        
+        drawPath();
     }
 
     @Override
@@ -53,7 +64,7 @@ public class PostRunMapView extends MapActivity {
 			}
 		}
 		//An acceptable zoom level
-		mView.getController().setZoom(13);
+		mView.getController().setZoom(14);
 		
 		//Plot the path
 		for (int i = 1; i < dataPoints.size(); i++) {

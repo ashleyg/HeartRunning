@@ -35,6 +35,18 @@ public class PostRunView extends Activity {
 			}
 		});
         
+        boolean hasGPS = false;
+        
+        for (MapDataPoint m : RunningView.gps.getMapDataPoints()) {
+        	if (m.hasLocationData()) {
+        		hasGPS = true;
+        		break;
+        	}
+        }
+        if (!hasGPS) {
+        	gotoMap.setEnabled(false);
+        }
+        
         //Calculate and display the run data
        	TextView distance = (TextView) findViewById(R.id.distance);
         distance.setText(calculateDistance() + " km");
@@ -55,6 +67,7 @@ public class PostRunView extends Activity {
 		return true;
 	}
 	
+
 	/**
 	 * Load the map view
 	 */

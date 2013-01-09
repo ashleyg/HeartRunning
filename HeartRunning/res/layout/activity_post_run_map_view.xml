@@ -11,4 +11,10 @@
         android:clickable="true"
         android:apiKey="0tH9CAxxoqA97nrxPL2VXa0p3gMnh3ggFenj-oA"
     />
+    <Button android:id="@+id/back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:text="@string/back_button"/>
 </RelativeLayout>

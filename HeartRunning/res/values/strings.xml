@@ -19,5 +19,6 @@
     <string name="distance_label">Distance:</string>
     <string name="hr_label">Average Heart Rate:</string>
     <string name="time_label">Time Taken:</string>
+    <string name="back_button">Back</string>
 
 </resources>
