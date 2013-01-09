@@ -12,13 +12,13 @@ import android.location.Location;
  */
 
 public class MapDataPoint {
-	Location location;
-	float bpm;
-	Date time;
+	private Location location;
+	private HeartRate bpm;
+	private Date time;
 	
 	public MapDataPoint(Location location, float bpm) {
 		this.location = location;
-		this.bpm = bpm;
+		this.bpm = new HeartRate(bpm);
 		time = new Date(System.currentTimeMillis());
 	}
 	
@@ -26,8 +26,12 @@ public class MapDataPoint {
 		return this.location;
 	}
 	
+	public HeartRate getHeartRate() {
+		return bpm;
+	}
+	
 	public float getBPM() {
-		return this.bpm;
+		return this.bpm.getBPM();
 	}
 	
 	public GeoPoint getLocationAsGeoPoint() {
@@ -48,7 +52,7 @@ public class MapDataPoint {
 	}
 	
 	public boolean hasBPM() {
-		if (bpm <= 0) {
+		if (bpm.getBPM() <= 0) {
 			return false;
 		}
 		return true;

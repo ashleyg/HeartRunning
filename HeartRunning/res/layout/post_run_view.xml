@@ -56,12 +56,80 @@
         android:layout_toRightOf="@+id/time_label"
         android:layout_marginLeft="10dp"
         android:layout_alignParentRight="true"  />
+    
+    <TextView
+        android:id="@+id/speed_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/time_label"
+        android:layout_alignParentLeft="true"
+        android:text="@string/speed_label"  />
+    
+    <TextView 
+        android:id="@+id/speed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/time_label"
+        android:layout_toRightOf="@+id/speed_label"
+        android:layout_marginLeft="10dp"
+        android:layout_alignParentRight="true"  />
+    
+    <TextView
+        android:id="@+id/fat_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/speed_label"
+        android:layout_alignParentLeft="true"
+        android:text="@string/fat_label"  />
+    
+    <TextView 
+        android:id="@+id/fat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/speed_label"
+        android:layout_toRightOf="@+id/fat_label"
+        android:layout_marginLeft="10dp"
+        android:layout_alignParentRight="true"  />
+    
+    <TextView
+        android:id="@+id/aerobic_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/fat_label"
+        android:layout_alignParentLeft="true"
+        android:text="@string/aerobic_label"  />
+    
+    <TextView 
+        android:id="@+id/aerobic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/fat_label"
+        android:layout_toRightOf="@+id/aerobic_label"
+        android:layout_marginLeft="10dp"
+        android:layout_alignParentRight="true"  />
+    
+    <TextView
+        android:id="@+id/anaerobic_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/aerobic_label"
+        android:layout_alignParentLeft="true"
+        android:text="@string/anaerobic_label"  />
+    
+    <TextView 
+        android:id="@+id/anaerobic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/aerobic_label"
+        android:layout_toRightOf="@+id/anaerobic_label"
+        android:layout_marginLeft="10dp"
+        android:layout_alignParentRight="true"  />
 
     <Button
         android:id="@+id/goto_map"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/hr_label"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
         android:text="@string/goto_map" />

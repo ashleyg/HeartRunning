@@ -20,5 +20,9 @@
     <string name="hr_label">Average Heart Rate:</string>
     <string name="time_label">Time Taken:</string>
     <string name="back_button">Back</string>
+    <string name="speed_label">Average Speed:</string>
+    <string name="fat_label">Time in Fat Burning Zone:</string>
+    <string name="aerobic_label">Time in Aerobic Zone:</string>
+    <string name="anaerobic_label">Time in Anaerobic Zone:</string>
 
 </resources>
