@@ -42,6 +42,7 @@ public class RunningView extends Activity {
     int runningAverage = -1;
     
     float oldBPM = 70.0f;
+    int area = -1; //Searh area
     
     
     // Sound stuff
@@ -171,7 +172,7 @@ public class RunningView extends Activity {
     }
     
     public float calculateBPM() {
-    	int area = 6;
+    	
     	int wait = 200;
     	if(data.size() > wait + area) {  
     		ArrayList<DataPoint> peaks = new ArrayList<DataPoint>();
@@ -211,7 +212,7 @@ public class RunningView extends Activity {
 		    	bpm = Math.max(1, bpm);
 		    	
 		    	
-		    	hrText.setText(Math.round(bpm)+" bpm" + " TBA - "+tba);
+		    	hrText.setText(Math.round(bpm)+" bpm" + " TBA - "+tba+" Area: "+area);
 		    	//Log.d("BPM",""+bpm);
 		    	//graph.drawPeaks(peaks);
 		    	
@@ -222,6 +223,27 @@ public class RunningView extends Activity {
 	    		// So it'll return the old value and will stop this happening hopefully!
 	    		return oldBPM; // Just in case
 	    	}
+    	} else {
+    		// This is before it works out.
+    		if(area == -1 && data.size() > 10+area) {
+    			// First wait for things to settle down
+    			long targetMS = 200;
+    			long currentMS = 0;
+    			long firstMS = 0;
+    			int nArea = 0;
+    			
+    			long startMS = data.get(data.size()-1).getTime();
+    			for(int i=data.size()-1;i>=0;i--) {
+    				long tmpMS = data.get(i).getTime();
+    				currentMS = startMS - tmpMS;
+            		Log.d("CMS","CMS: "+currentMS);
+    				
+    				if( currentMS >= targetMS) {
+    					area = data.size() - 1 - i;
+    					break;
+    				}
+    			}
+    		}
     	}
     	return -1.0f; //Just in case
     }
