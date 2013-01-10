@@ -40,10 +40,9 @@ public class RunningView extends Activity {
     // Data
     ArrayList<DataPoint> data;
     int runningAverage = -1;
-    
-    float oldBPM = 70.0f;
+    float targetBPM;
+    float oldBPM = 70.0f; 
     int area = -1; //Searh area
-    
     
     // Sound stuff
     MediaPlayer mpRunFaster;
@@ -95,6 +94,33 @@ public class RunningView extends Activity {
         // Media player
         mpRunFaster = MediaPlayer.create(this, R.raw.runfaster);
         mpRunSlower = MediaPlayer.create(this, R.raw.runslower);
+        
+        playEncouragement(); // might as well give some starting encouragment
+        //mpRunFaster.start();
+    }
+    
+    public void playEncouragement(){
+    	//TODO oldBPM needs to be the curent BPM
+    	if(oldBPM < ((double) (targetBPM - 5.0))){
+    		playRunFaster();
+    	}else if(oldBPM > ((double)(targetBPM + 5.0))){
+    		playRunSlower();
+    	}
+    }
+    
+    //TODO need to call function
+    //currently says slower as this is not initilised 
+    public void setTargetBPM(int Speed){
+    	if(Speed == 0){
+    		//slow 100
+    		targetBPM = (float)100.0;
+    	}else if(Speed == 1){
+    		//medium 120 
+    		targetBPM = (float)120.0;
+    	}else{
+    		//fast 140 
+    		targetBPM = (float)140.0;
+    	}
     }
     
     public void playRunFaster() {
