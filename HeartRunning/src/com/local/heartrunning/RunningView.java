@@ -49,6 +49,14 @@ public class RunningView extends Activity {
     MediaPlayer mpRunFaster;
     MediaPlayer mpRunSlower;
     
+    private void openCamera() {
+    	mCamera = getCameraInstance();
+        // The following turns the flash on
+        Parameters p = mCamera.getParameters();
+        p.setFlashMode(Parameters.FLASH_MODE_TORCH);
+        mCamera.setParameters(p);
+    }
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,12 +84,7 @@ public class RunningView extends Activity {
         graph.linkData(data);
         
         // Create an instance of Camera
-        mCamera = getCameraInstance();
-        // The following turns the flash on
-        Parameters p = mCamera.getParameters();
-        p.setFlashMode(Parameters.FLASH_MODE_TORCH);
-        mCamera.setParameters(p);
-
+        openCamera();
         
         // Create our Preview view and set it as the content of our activity.
         mPreview = new CameraPreview(this, mCamera);
@@ -92,9 +95,6 @@ public class RunningView extends Activity {
         // Media player
         mpRunFaster = MediaPlayer.create(this, R.raw.runfaster);
         mpRunSlower = MediaPlayer.create(this, R.raw.runslower);
-        
-        //playRunFaster(); // might as well give some starting encouragment
-        //mpRunFaster.start();
     }
     
     public void playRunFaster() {

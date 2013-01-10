@@ -22,6 +22,10 @@ public class PostRunView extends Activity {
 	Button gotoMap;
 	WorkoutData data;
 	
+	private void back() {
+		Intent intentStopRunning = new Intent(this,RunningView.class);
+    	startActivity(intentStopRunning);
+	}
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -29,10 +33,16 @@ public class PostRunView extends Activity {
 		setContentView(R.layout.post_run_view);
 		// Load GUI Components
         gotoMap = (Button)findViewById(R.id.goto_map);
-        
         gotoMap.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				loadMap();			
+			}
+		});
+        
+        Button back = (Button)findViewById(R.id.back_run_view);
+        back.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				back();
 			}
 		});
         

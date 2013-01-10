@@ -130,9 +130,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
+        android:layout_alignRight="@+id/anaerobic"
+        android:layout_toRightOf="@+id/aerobic_label"
         android:text="@string/goto_map" />
 
+    <Button
+        android:id="@+id/back_run_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/anaerobic_label"
+        android:layout_alignParentBottom="true"
+        android:layout_alignTop="@+id/goto_map"
+        android:layout_toLeftOf="@+id/goto_map"
+        android:text="@string/back_button" />
 
 </RelativeLayout>
