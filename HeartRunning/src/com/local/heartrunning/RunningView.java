@@ -47,6 +47,8 @@ public class RunningView extends Activity {
     // Sound stuff
     MediaPlayer mpRunFaster;
     MediaPlayer mpRunSlower;
+    float timeBetweenMessages = 5000;
+    float nextMessage = 0;
     
     private void openCamera() {
     	mCamera = getCameraInstance();
@@ -101,10 +103,14 @@ public class RunningView extends Activity {
     
     public void playEncouragement(){
     	//TODO oldBPM needs to be the current BPM
+    	//Don't worry about oldBPM being current BPM as it'll only be a few 100ms out
+    	//at the worst of time - AG
     	if(oldBPM < ((double) (targetBPM - 5.0))){
     		playRunFaster();
     	}else if(oldBPM > ((double)(targetBPM + 5.0))){
     		playRunSlower();
+    	}else {
+    		playWellDone();
     	}
     }
     
@@ -123,6 +129,15 @@ public class RunningView extends Activity {
     	}
     }
     
+    private void updatePlayStats() {
+    	nextMessage = System.currentTimeMillis() + timeBetweenMessages;
+    }
+    
+    public void playWellDone() {
+    	//TODO - Make a decent run normally noise
+    	playRunFaster();
+    }
+    
     public void playRunFaster() {
     	/*
     	mpRunFaster.reset();
@@ -134,7 +149,11 @@ public class RunningView extends Activity {
 			e.printStackTrace();
 		}
 		*/
-    	mpRunFaster.start();
+    	
+    	if(System.currentTimeMillis() > nextMessage) {
+    		mpRunFaster.start();
+    		updatePlayStats();
+    	}
     }
     
     public void playRunSlower() {
@@ -148,7 +167,10 @@ public class RunningView extends Activity {
 			e.printStackTrace();
 		}
 		*/
-    	mpRunSlower.start();
+    	if(System.currentTimeMillis() > nextMessage) {
+    		mpRunSlower.start();
+    		updatePlayStats();
+    	}
     }
     
     //public void processImage(Bitmap bitmap) {
@@ -182,7 +204,8 @@ public class RunningView extends Activity {
     	graph.invalidate();
     	
     	
-    	float rBPM = calculateBPM();
+    	this.calculateBPM();
+    	this.playEncouragement();
     	
     }
     
