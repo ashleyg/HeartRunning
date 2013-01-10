@@ -42,7 +42,7 @@ public class RunningView extends Activity {
     int runningAverage = -1;
     float targetBPM;
     float oldBPM = 70.0f; 
-    int area = -1; //Searh area
+    int area = -1; //Search area
     
     // Sound stuff
     MediaPlayer mpRunFaster;
@@ -95,12 +95,12 @@ public class RunningView extends Activity {
         mpRunFaster = MediaPlayer.create(this, R.raw.runfaster);
         mpRunSlower = MediaPlayer.create(this, R.raw.runslower);
         
-        playEncouragement(); // might as well give some starting encouragment
+        playEncouragement(); // might as well give some starting encouragement
         //mpRunFaster.start();
     }
     
     public void playEncouragement(){
-    	//TODO oldBPM needs to be the curent BPM
+    	//TODO oldBPM needs to be the current BPM
     	if(oldBPM < ((double) (targetBPM - 5.0))){
     		playRunFaster();
     	}else if(oldBPM > ((double)(targetBPM + 5.0))){
@@ -109,7 +109,7 @@ public class RunningView extends Activity {
     }
     
     //TODO need to call function
-    //currently says slower as this is not initilised 
+    //currently says slower as this is not initialized 
     public void setTargetBPM(int Speed){
     	if(Speed == 0){
     		//slow 100
@@ -157,8 +157,6 @@ public class RunningView extends Activity {
     	
     	//Loop through the first width*height which are apparently
     	//http://stackoverflow.com/questions/5272388/need-help-with-androids-nv21-format 
-    	//The last comment says this
-    	//TODO - Check the cast does something remotely useful
     	
     	//NOTE the imageData.size() != width*height so please please don't do enhanced forloop.
     	for(int x = 0; x < width*height; x++) {
