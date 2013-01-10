@@ -1,8 +1,18 @@
 package com.local.heartrunning;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -32,8 +42,7 @@ public class RunningView extends Activity {
 	GraphView graph;
 	
 	// Other stuff
-	//A very hacky way to make data visible to the next activity
-	public static GPSManager gps;	
+	private GPSManager gps;	
 	private Camera mCamera;
     private CameraPreview mPreview;
     
@@ -300,7 +309,9 @@ public class RunningView extends Activity {
     }
     
     public void stopRunning() {
+    	String file = storeRun();
     	Intent intentStopRunning = new Intent(this,PostRunView.class);
+    	intentStopRunning.putExtra("file", file);
     	startActivity(intentStopRunning);
     }
     
@@ -333,5 +344,33 @@ public class RunningView extends Activity {
             // Camera is not available (in use or does not exist)
         }
         return c; // returns null if camera is unavailable
+    }
+    
+    private String storeRun() {
+    	String file = "";
+    	if (!gps.getMapDataPoints().isEmpty()) {
+    		file = Long.toString(gps.getMapDataPoints().get(0).getTime()) + ".xml";
+    		
+    		
+    		FileOutputStream fos;
+			try {
+				fos = openFileOutput(file, Context.MODE_PRIVATE);
+				fos.write("<document>".getBytes());
+				for (MapDataPoint m : gps.getMapDataPoints()) {
+					fos.write(m.getXml().getBytes());
+				}
+				fos.write("</document>".getBytes());
+	    		fos.close();
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+    		
+    	}
+    	return file;
     }
 }

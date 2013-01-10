@@ -6,7 +6,6 @@ import com.local.heartrunning.HeartRate.Zone;
 
 /**
  * Analyse the run data...with SCIENCE
- * @author Joshua
  *
  */
 public class WorkoutData {
@@ -31,6 +30,37 @@ public class WorkoutData {
 	}
 	
 	/**
+	 * Empty constructor so we don't crash
+	 */
+	public WorkoutData() {
+		points = new ArrayList<MapDataPoint>();
+		averageHeartRate = 0;
+		distance = 0;
+		time = 0;
+		speed = 0;
+		fat = 0;
+		aerobic = 0;
+		anaerobic = 0;
+	}
+	
+	public ArrayList<MapDataPoint> getMapDataPoints() {
+		return points;
+	}
+	
+	/**
+	 * Check if gps data exists so we can plot on a map
+	 * @return
+	 */
+	public boolean hasGPS() {
+        for (MapDataPoint m : points) {
+        	if (m.hasLocationData()) {
+        		return true;
+		  	}
+        }
+        return false;
+	}
+	
+	/**
 	 * Calculate distance, time and average heart rate
 	 */
 	private void calculateRawMetrics() {
@@ -41,10 +71,10 @@ public class WorkoutData {
 		distance /= 1000;		
 		
 		averageHeartRate = 0;
-		for (MapDataPoint p : RunningView.gps.getMapDataPoints()) {
+		for (MapDataPoint p : points) {
 			averageHeartRate += p.getBPM();
 		}
-		averageHeartRate /= RunningView.gps.getMapDataPoints().size();
+		averageHeartRate /= points.size();
 		
 		time = 0;
 		if (points.size() > 1) {

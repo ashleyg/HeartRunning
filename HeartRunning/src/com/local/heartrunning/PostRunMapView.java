@@ -54,7 +54,7 @@ public class PostRunMapView extends MapActivity {
 	 * Draw the route of the activity on the map
 	 */
 	private void drawPath() {
-		ArrayList<MapDataPoint> dataPoints = RunningView.gps.getMapDataPoints();
+		ArrayList<MapDataPoint> dataPoints = PostRunView.data.getMapDataPoints();
 
 		//Make sure we actually have data
 		if (!dataPoints.isEmpty()) {

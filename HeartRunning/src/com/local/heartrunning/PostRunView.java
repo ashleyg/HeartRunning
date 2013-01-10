@@ -1,11 +1,25 @@
 package com.local.heartrunning;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+
 import android.os.Bundle;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -20,10 +34,11 @@ import android.widget.TextView;
 public class PostRunView extends Activity {
 
 	Button gotoMap;
-	WorkoutData data;
+	public static WorkoutData data;
+
 	
 	private void back() {
-		Intent intentStopRunning = new Intent(this,RunningView.class);
+		Intent intentStopRunning = new Intent(this, MainMenu.class);
     	startActivity(intentStopRunning);
 	}
 	
@@ -31,6 +46,11 @@ public class PostRunView extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.post_run_view);
+		
+		//Get file name from previous activity
+		Bundle extras = getIntent().getExtras();
+		String file = extras.getString("file");
+		
 		// Load GUI Components
         gotoMap = (Button)findViewById(R.id.goto_map);
         gotoMap.setOnClickListener(new OnClickListener() {
@@ -46,19 +66,25 @@ public class PostRunView extends Activity {
 			}
 		});
         
-        boolean hasGPS = false;
-        
-        for (MapDataPoint m : RunningView.gps.getMapDataPoints()) {
-        	if (m.hasLocationData()) {
-        		hasGPS = true;
-        		break;
-        	}
+        //If we've got a file name, access it
+        if (file.length() > 0) {
+        	data = new WorkoutData(getDataPoints(file));
         }
-        if (!hasGPS) {
+        //If not, get the latest file
+        else if (getFileList().length > 0) {
+        	data = new WorkoutData(getDataPoints());
+        }
+        //The user deserves a medal if this is fired off
+        else {
+        	data = new WorkoutData();
+        }
+
+        //Check if gps data exists
+        if (!data.hasGPS()) {
         	gotoMap.setEnabled(false);
         }
         
-        data = new WorkoutData(RunningView.gps.getMapDataPoints());
+        
         
         //Calculate and display the run data
        	TextView distance = (TextView) findViewById(R.id.distance);
@@ -100,6 +126,82 @@ public class PostRunView extends Activity {
 		Intent intentMapView = new Intent(this, PostRunMapView.class);
         startActivity(intentMapView);	
     }
+	
+	/**
+	 * Gets data points from an xml file
+	 * @param file is the name of the file
+	 * @return
+	 */
+	private ArrayList<MapDataPoint> getDataPoints(String file) {
+		Document doc = loadData(file);
+		return parseDocument(doc);
+	}
+	
+	/**
+	 * Get the data points from the first file in the list
+	 * @return
+	 */
+	private ArrayList<MapDataPoint> getDataPoints() {
+		Document doc = loadData(getFileList()[0]);
+		return parseDocument(doc);
+	}
+	
+	/**
+	 * Parse an xml file
+	 * @param doc
+	 * @return
+	 */
+	private ArrayList<MapDataPoint> parseDocument(Document doc) {
+		ArrayList<MapDataPoint> points = new ArrayList<MapDataPoint>();
+		//For each node of data, add to our list of points
+		NodeList nl = (NodeList) doc.getElementsByTagName("data");
+		for (int i = 0; i < nl.getLength(); i++) {
+			Element e = (Element) nl.item(i);
+			points.add(new MapDataPoint(e));
+		}
+		return points;
+	}
+	
+	/**
+	 * Get a list of files we store
+	 * @return
+	 */
+	private String[] getFileList() {
+		return getApplicationContext().fileList();
+	}
+	
+	/**
+	 * Load an xml file from internal storage
+	 * @param fileName
+	 * @return
+	 */
+	private Document loadData(String fileName) {
+		FileInputStream fis;
+		Document d = null;
+		try {
+			fis = openFileInput(fileName);
+			String file = "";
+			int temp;
+			while ((temp = fis.read()) != -1) {
+				file += (char) temp;
+			}
+			
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder builder;
+			builder = factory.newDocumentBuilder();
+			d = builder.parse(new InputSource(new StringReader(file)));
+			return d;
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ParserConfigurationException e) {
+			e.printStackTrace();
+		} catch (SAXException e) {
+			e.printStackTrace();
+		}
+		return d;
+	}
 
 	
 	
