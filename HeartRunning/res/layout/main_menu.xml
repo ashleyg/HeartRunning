@@ -12,6 +12,7 @@
         android:layout_marginTop="34dp"
         android:text="Let's get Going!" />
 
+    
     <Button
         android:id="@+id/menu_start_running_button"
         android:layout_width="wrap_content"
@@ -19,5 +20,30 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="25dp"
         android:text="@string/start_running" />
-
+    
+   
+  <Button
+        android:id="@+id/menu_start_slow_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="25dp"
+        android:text="@string/start_slow" />
+  
+  <Button
+        android:id="@+id/menu_start_medium_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="25dp"
+        android:text="@string/start_medium" />
+  <Button
+        android:id="@+id/menu_start_fast_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="25dp"
+        android:text="@string/start_fast" />
+  
+  
 </LinearLayout>

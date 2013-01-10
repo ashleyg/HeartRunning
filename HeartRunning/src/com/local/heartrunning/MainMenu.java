@@ -17,7 +17,7 @@ public class MainMenu extends Activity {
 	Button startMedium;
 	Button startFast;
 	
-	public int Speed;
+	public static int speed;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -27,20 +27,22 @@ public class MainMenu extends Activity {
         // Load GUI Components
         //TODO add GUI components for slow medium fast and get the buttons up and passing data
         startRunningButton = (Button)findViewById(R.id.menu_start_running_button);
-        startSlow = (Button)findViewById(R.id.menu_start_running_button);
-        startMedium = (Button)findViewById(R.id.menu_start_running_button);
-        startFast = (Button)findViewById(R.id.menu_start_running_button);
+        startSlow = (Button)findViewById(R.id.menu_start_slow_button);
+        startMedium = (Button)findViewById(R.id.menu_start_medium_button);
+        startFast = (Button)findViewById(R.id.menu_start_fast_button);
         
         startRunningButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				loadStartRunning(4);			
 			}
 		});
+        
         startSlow.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				loadStartRunning(0);			
 			}
 		});
+        
         startMedium.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				loadStartRunning(1);			
@@ -68,7 +70,7 @@ public class MainMenu extends Activity {
     //TODO make speed play audio
     public void loadStartRunning(int speed) {
     	Intent intentStartRunning = new Intent(this,RunningView.class);
-  		startActivity(intentStartRunning);	
+    	startActivity(intentStartRunning);	
     }
 
 }

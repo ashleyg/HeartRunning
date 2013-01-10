@@ -96,7 +96,7 @@ public class RunningView extends Activity {
         // Media player
         mpRunFaster = MediaPlayer.create(this, R.raw.runfaster);
         mpRunSlower = MediaPlayer.create(this, R.raw.runslower);
-        
+        setTargetBPM(MainMenu.speed);
         playEncouragement(); // might as well give some starting encouragement
         //mpRunFaster.start();
     }
@@ -114,8 +114,6 @@ public class RunningView extends Activity {
     	}
     }
     
-    //TODO need to call function
-    //currently says slower as this is not initialized 
     public void setTargetBPM(int Speed){
     	if(Speed == 0){
     		//slow 100
