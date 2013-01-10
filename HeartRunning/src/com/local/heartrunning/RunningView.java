@@ -105,7 +105,12 @@ public class RunningView extends Activity {
         // Media player
         mpRunFaster = MediaPlayer.create(this, R.raw.runfaster);
         mpRunSlower = MediaPlayer.create(this, R.raw.runslower);
-        setTargetBPM(MainMenu.speed);
+        
+        //Get file name from previous activity
+  		Bundle extras = getIntent().getExtras();
+  		int speed = extras.getInt("speed");
+        
+        setTargetBPM(speed);
         playEncouragement(); // might as well give some starting encouragement
         //mpRunFaster.start();
     }

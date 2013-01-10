@@ -64,8 +64,6 @@ public class MapDataPoint {
 	public GeoPoint getLocationAsGeoPoint() {
 		int latitude = (int) (location.getLatitude() * 1E6);
 		int longitude = (int) (location.getLongitude() * 1E6);
-		Log.i("Latitude", Double.toString(getLocation().getLatitude()));
-		Log.i("LatitudeGP", Double.toString(latitude));
 		return new GeoPoint(latitude, longitude);
 	}
 	
@@ -106,7 +104,6 @@ public class MapDataPoint {
 		xml += "<time>";
 		xml += Long.toString(getTime());
 		xml += "</time>";
-		Log.i("Latitude", Double.toString(getLocation().getLatitude()));
 
 		//Add location
 		xml += "<location>";

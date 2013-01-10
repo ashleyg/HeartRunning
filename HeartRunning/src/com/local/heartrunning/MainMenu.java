@@ -17,7 +17,7 @@ public class MainMenu extends Activity {
 	Button startMedium;
 	Button startFast;
 	
-	public static int speed;
+	private int speed;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,8 +68,10 @@ public class MainMenu extends Activity {
     }
     
     //TODO make speed play audio
-    public void loadStartRunning(int speed) {
-    	Intent intentStartRunning = new Intent(this,RunningView.class);
+    public void loadStartRunning(int s) {
+    	speed = s;
+    	Intent intentStartRunning = new Intent(this, RunningView.class);
+    	intentStartRunning.putExtra("speed", speed);
     	startActivity(intentStartRunning);	
     }
 
