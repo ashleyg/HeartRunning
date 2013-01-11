@@ -49,6 +49,11 @@ public class PostRunView extends Activity {
 	}
 	
 	@Override
+	public void onBackPressed() {
+		back();
+	}
+	
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.post_run_view);
