@@ -103,23 +103,23 @@
 
 
     <Button
-        android:id="@+id/goto_map"
+        android:id="@+id/back_run_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignRight="@+id/target"
         android:layout_toRightOf="@+id/target_label"
-        android:text="@string/goto_map" />
+        android:text="@string/back_button" />
 
     <Button
-        android:id="@+id/back_run_view"
+        android:id="@+id/goto_map"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/target_label"
         android:layout_alignParentBottom="true"
-        android:layout_alignTop="@+id/goto_map"
-        android:layout_toLeftOf="@+id/goto_map"
-        android:text="@string/back_button" />
+        android:layout_alignTop="@+id/back_run_view"
+        android:layout_toLeftOf="@+id/back_run_view"
+        android:text="@string/goto_map" />
 
 
 </RelativeLayout>

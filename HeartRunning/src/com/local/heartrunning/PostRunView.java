@@ -29,6 +29,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Displays information about the run for analysis...with SCIENCE
@@ -58,6 +59,14 @@ public class PostRunView extends Activity {
 		target = extras.getFloat("target");
 		
 		// Load GUI Components
+		Button back = (Button)findViewById(R.id.back_run_view);
+        back.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				back();
+			}
+		});
+		
+		
         gotoMap = (Button)findViewById(R.id.goto_map);
         gotoMap.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
@@ -65,12 +74,7 @@ public class PostRunView extends Activity {
 			}
 		});
         
-        Button back = (Button)findViewById(R.id.back_run_view);
-        back.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				back();
-			}
-		});
+        
         
 		changeWorkout(file);
         
@@ -83,8 +87,6 @@ public class PostRunView extends Activity {
 
 			@Override
 			public void onItemSelected(AdapterView<?> arg0, View arg1, int pos, long id) {
-				gotoMap.setEnabled(false);
-				loadingDataFields();
 				changeWorkout(convertToFileName(spinner.getItemAtPosition(pos).toString()));
 				
 			}
@@ -107,6 +109,11 @@ public class PostRunView extends Activity {
 	}
 	
 	private void changeWorkout(String file) {
+		
+		Toast toast = Toast.makeText(getApplicationContext(), "Processing Run", Toast.LENGTH_LONG);
+    	toast.show();
+		gotoMap.setEnabled(false);
+		loadingDataFields();
 		//If we've got a file name, access it
         if (file.length() > 0) {
         	data = new WorkoutData(getDataPoints(file), target);

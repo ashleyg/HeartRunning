@@ -36,6 +36,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class RunningView extends Activity {
 
@@ -142,6 +143,7 @@ public class RunningView extends Activity {
     		//fast 140 
     		targetBPM = (float)140.0;
     	}
+    	Log.i("Target", Float.toString(targetBPM));
     }
     
     private void updatePlayStats() {
@@ -317,6 +319,8 @@ public class RunningView extends Activity {
     }
     
     public void stopRunning() {
+    	Toast toast = Toast.makeText(getApplicationContext(), "Processing Run", Toast.LENGTH_LONG);
+    	toast.show();
     	String file = storeRun();
     	Intent intentStopRunning = new Intent(this,PostRunView.class);
     	intentStopRunning.putExtra("file", file);

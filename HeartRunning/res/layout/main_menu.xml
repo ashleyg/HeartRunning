@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
@@ -8,42 +8,46 @@
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="34dp"
-        android:text="Let's get Going!" />
+        android:text="Let's get Going!"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    
-    <Button
-        android:id="@+id/menu_start_running_button"
+<RadioGroup
+        android:id="@+id/radioGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="25dp"
-        android:text="@string/start_running" />
-    
-   
-  <Button
+        android:layout_below="@+id/textView1"
+        android:layout_marginTop="30dp"
+        android:layout_centerHorizontal="true"
+         >
+  <RadioButton
         android:id="@+id/menu_start_slow_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="25dp"
         android:text="@string/start_slow" />
   
-  <Button
+  <RadioButton
         android:id="@+id/menu_start_medium_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="25dp"
         android:text="@string/start_medium" />
+  <RadioButton
+      android:id="@+id/menu_start_fast_button"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/start_fast" />
+  
+  </RadioGroup>
+  
   <Button
-        android:id="@+id/menu_start_fast_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="25dp"
-        android:text="@string/start_fast" />
+      android:id="@+id/start_run"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_alignParentBottom="true"
+      android:layout_gravity="center_horizontal"
+      android:text="@string/start_running" />
+
   
   
-</LinearLayout>
+</RelativeLayout>
