@@ -81,7 +81,7 @@ public class PostRunView extends Activity {
         
         
         
-		changeWorkout(file);
+		
         
         String[] files = getFileList();
         final Spinner spinner = (Spinner) findViewById(R.id.workout_spinner);
@@ -102,8 +102,9 @@ public class PostRunView extends Activity {
 			}
         	
         });
-
+        //spinner.setSelection(files.length -1);
         
+        changeWorkout(file);
 	}
 
 	@Override
