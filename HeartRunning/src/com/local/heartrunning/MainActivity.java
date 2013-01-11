@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends FacebookActivity {
 
@@ -26,7 +27,7 @@ public class MainActivity extends FacebookActivity {
         
         // Load GUI Components
         loginButton = (Button)findViewById(R.id.login_button);
-        
+        loginButton.setEnabled(false);
         loginButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				loadMenu();			
@@ -34,7 +35,9 @@ public class MainActivity extends FacebookActivity {
 		});
         this.openSession();
         if (User.getInstance().getFacebook() != null) {
-        	loadMenu();
+        	Toast toast = Toast.makeText(getApplicationContext(), "Logged In", Toast.LENGTH_LONG);
+        	toast.show();
+        	loginButton.setEnabled(true);
         }
     }
 
@@ -55,8 +58,10 @@ public class MainActivity extends FacebookActivity {
 		        @Override
 		        public void onCompleted(GraphUser user, Response response) {
 		          if (user != null) {
+		        	  Toast toast = Toast.makeText(getApplicationContext(), "Logged In", Toast.LENGTH_LONG);
+		          	  toast.show();
 		        	  User.getInstance().addFacebook(user);
-		        	  loadMenu();
+		        	  loginButton.setEnabled(true);
 		          }
 		        }
 		      }

@@ -11,15 +11,18 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="34dp"
         android:text="@string/welcome_message"
-        tools:context=".MainActivity" />
+        tools:context=".MainActivity"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <Button
         android:id="@+id/login_button"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView1"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="25dp"
+        android:layout_marginBottom="10dp"
         android:text="@string/login_button" />
+
+
 
 </RelativeLayout>
