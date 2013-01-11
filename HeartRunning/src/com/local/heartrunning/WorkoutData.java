@@ -76,10 +76,14 @@ public class WorkoutData {
 		distance /= 1000;		
 		
 		averageHeartRate = 0;
+		int count = 0;
 		for (MapDataPoint p : points) {
-			averageHeartRate += p.getHeartRate();
+			if (p.getHeartRate() >= 40) {
+				averageHeartRate += p.getHeartRate();
+				count++;
+			}
 		}
-		averageHeartRate /= points.size();
+		averageHeartRate /= count;
 		
 		time = 0;
 		if (points.size() > 1) {
