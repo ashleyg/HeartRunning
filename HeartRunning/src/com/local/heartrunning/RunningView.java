@@ -276,7 +276,8 @@ public class RunningView extends Activity {
 		    	bpm = Math.max(1, bpm);
 		    	
 		    	
-		    	hrText.setText(Math.round(bpm)+" bpm" + " TBA - "+tba+" Area: "+area);
+		    	//hrText.setText(Math.round(bpm)+" bpm" + " TBA - "+tba+" Area: "+area);
+		    	hrText.setText(Math.round(bpm)+" bpm");
 		    	//Log.d("BPM",""+bpm);
 		    	//graph.drawPeaks(peaks);
 		    	
