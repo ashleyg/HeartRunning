@@ -142,7 +142,7 @@ public class WorkoutData {
 	}
 	
 	public String getTargetTime() {
-		return Integer.toString(Math.round(targetPercentage)) + "%";
+		return Integer.toString(Math.round(targetPercentage));
 	}
 	
 	

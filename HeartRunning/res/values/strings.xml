@@ -26,5 +26,6 @@
 	<string name="start_fast">Fast Run</string>
 	<string name="choose_workout">View Workout</string>
 	<string name="target_label">Time in Target HR (%):</string>
+	<string name="heartscore_label">Your Heart Score</string>
 	
 </resources>

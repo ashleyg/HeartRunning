@@ -169,8 +169,8 @@ public class PostRunView extends Activity {
         TextView speed = (TextView) findViewById(R.id.speed);
         speed.setText(data.getSpeed());
         
-        TextView target = (TextView) findViewById(R.id.target);
-        target.setText(data.getTargetTime());
+        TextView heartscore = (TextView) findViewById(R.id.heartscore);
+        heartscore.setText(data.getTargetTime());
 
 	}
 	
@@ -191,8 +191,8 @@ public class PostRunView extends Activity {
         TextView speed = (TextView) findViewById(R.id.speed);
         speed.setText(calculating);
         
-        TextView target = (TextView) findViewById(R.id.target);
-        target.setText(calculating);
+        TextView heartscore = (TextView) findViewById(R.id.heartscore);
+        heartscore.setText(calculating);
 	}
 
 
