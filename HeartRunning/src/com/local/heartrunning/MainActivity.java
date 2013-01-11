@@ -27,7 +27,7 @@ public class MainActivity extends FacebookActivity {
         
         // Load GUI Components
         loginButton = (Button)findViewById(R.id.login_button);
-        loginButton.setEnabled(false);
+//        loginButton.setEnabled(false);
         loginButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				loadMenu();			
