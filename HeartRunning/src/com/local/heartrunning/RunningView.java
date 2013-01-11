@@ -5,7 +5,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -354,13 +357,22 @@ public class RunningView extends Activity {
     private String storeRun() {
     	String file = "";
     	if (!gps.getMapDataPoints().isEmpty()) {
-    		file = Long.toString(gps.getMapDataPoints().get(0).getTime()) + ".xml";
+    		Date d = new Date(gps.getMapDataPoints().get(0).getTime());
+    		SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yy hh:mm a");
+    		
+    		try {
+				file = Long.toString(new SimpleDateFormat("dd/mm/yy hh:mm a").parse(sdf.format(d)).getTime()) + ".xml";
+			} catch (ParseException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
     		
     		
     		FileOutputStream fos;
 			try {
 				fos = openFileOutput(file, Context.MODE_PRIVATE);
-				fos.write("<document>".getBytes());
+				String target = "<document target=\"" + Float.toString(targetBPM) + "\">";
+				fos.write(target.getBytes());
 				for (MapDataPoint m : gps.getMapDataPoints()) {
 					fos.write(m.getXml().getBytes());
 				}

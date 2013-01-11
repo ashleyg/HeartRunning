@@ -4,25 +4,30 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.StringReader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 /**
@@ -34,6 +39,7 @@ public class PostRunView extends Activity {
 
 	Button gotoMap;
 	public static WorkoutData data;
+	float target;
 
 	
 	private void back() {
@@ -49,6 +55,7 @@ public class PostRunView extends Activity {
 		//Get file name from previous activity
 		Bundle extras = getIntent().getExtras();
 		String file = extras.getString("file");
+		target = extras.getFloat("target");
 		
 		// Load GUI Components
         gotoMap = (Button)findViewById(R.id.goto_map);
@@ -65,27 +72,84 @@ public class PostRunView extends Activity {
 			}
 		});
         
-        //If we've got a file name, access it
+		changeWorkout(file);
+        
+        String[] files = getFileList();
+        final Spinner spinner = (Spinner) findViewById(R.id.workout_spinner);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, files);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> arg0, View arg1, int pos, long id) {
+				gotoMap.setEnabled(false);
+				loadingDataFields();
+				changeWorkout(convertToFileName(spinner.getItemAtPosition(pos).toString()));
+				
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+				
+			}
+        	
+        });
+
+        
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+//		getMenuInflater().inflate(R.menu.activity_post_run_map_view, menu);
+		return true;
+	}
+	
+	private void changeWorkout(String file) {
+		//If we've got a file name, access it
         if (file.length() > 0) {
-        	data = new WorkoutData(getDataPoints(file));
+        	data = new WorkoutData(getDataPoints(file), target);
         }
         //If not, get the latest file
         else if (getFileList().length > 0) {
-        	data = new WorkoutData(getDataPoints());
+        	data = new WorkoutData(getDataPoints(), target);
         }
         //The user deserves a medal if this is fired off
         else {
         	data = new WorkoutData();
         }
-
+        
         //Check if gps data exists
         if (!data.hasGPS()) {
         	gotoMap.setEnabled(false);
         }
+        else {
+        	gotoMap.setEnabled(true);
+        }
         
-        
-        
-        //Calculate and display the run data
+        populateDataFields();
+	}
+	
+	private Date convertToHumanReadable(String file) {
+		return new Date(Long.parseLong(file.substring(0, file.lastIndexOf('.'))));
+	}
+	
+	private String convertToFileName(String date) {
+		Date d = new Date();
+		try {
+			d = new SimpleDateFormat("dd/mm/yy hh:mm a").parse(date);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return Long.toString(d.getTime()) + ".xml";
+	}
+	
+	
+	
+	private void populateDataFields() {
+		//Calculate and display the run data
        	TextView distance = (TextView) findViewById(R.id.distance);
         distance.setText(data.getDistance());
         
@@ -98,23 +162,30 @@ public class PostRunView extends Activity {
         TextView speed = (TextView) findViewById(R.id.speed);
         speed.setText(data.getSpeed());
         
-        TextView fat = (TextView) findViewById(R.id.fat);
-        fat.setText(data.getFat());
-        
-        TextView aerobic = (TextView) findViewById(R.id.aerobic);
-        aerobic.setText(data.getAerobic());
-        
-        TextView anaerobic = (TextView) findViewById(R.id.anaerobic);
-        anaerobic.setText(data.getAnaerobic());
-        
-        
-	}
+        TextView target = (TextView) findViewById(R.id.target);
+        target.setText(data.getTargetTime());
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-//		getMenuInflater().inflate(R.menu.activity_post_run_map_view, menu);
-		return true;
+	}
+	
+	private void loadingDataFields() {
+		
+		String calculating = "Calculating";
+		
+		//Calculate and display the run data
+       	TextView distance = (TextView) findViewById(R.id.distance);
+        distance.setText(calculating);
+        
+        TextView hr = (TextView) findViewById(R.id.hr);
+        hr.setText(calculating);
+        
+        TextView time = (TextView) findViewById(R.id.time);
+        time.setText(calculating);
+        
+        TextView speed = (TextView) findViewById(R.id.speed);
+        speed.setText(calculating);
+        
+        TextView target = (TextView) findViewById(R.id.target);
+        target.setText(calculating);
 	}
 
 
@@ -141,7 +212,7 @@ public class PostRunView extends Activity {
 	 * @return
 	 */
 	private ArrayList<MapDataPoint> getDataPoints() {
-		Document doc = loadData(getFileList()[0]);
+		Document doc = loadData(convertToFileName(getFileList()[0]));
 		return parseDocument(doc);
 	}
 	
@@ -166,7 +237,23 @@ public class PostRunView extends Activity {
 	 * @return
 	 */
 	private String[] getFileList() {
-		return getApplicationContext().fileList();
+		String[] files = getApplicationContext().fileList();
+		ArrayList<String> array = new ArrayList<String>();
+		for (String s : files) {
+			if (s.endsWith(".xml")) {
+				array.add(s);
+			}
+		}
+
+		SimpleDateFormat formatter;
+		ArrayList<String> dateList = new ArrayList<String>();
+		for (String s : array) {
+			formatter = new SimpleDateFormat("dd/mm/yy hh:mm a");
+			dateList.add(formatter.format(convertToHumanReadable(s)));
+		}
+		files = new String[dateList.size()];
+		dateList.toArray(files);
+		return files;
 	}
 	
 	/**
@@ -185,10 +272,12 @@ public class PostRunView extends Activity {
 				file += (char) temp;
 			}
 			
+
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder;
 			builder = factory.newDocumentBuilder();
 			d = builder.parse(new InputSource(new StringReader(file)));
+			target = Float.parseFloat(d.getDocumentElement().getAttribute("target"));
 			return d;
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -201,8 +290,6 @@ public class PostRunView extends Activity {
 		}
 		return d;
 	}
-
-	
 	
 
 }

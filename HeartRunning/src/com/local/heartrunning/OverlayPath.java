@@ -73,22 +73,15 @@ public class OverlayPath extends Overlay {
 		else {
 			return Color.BLACK;
 		}
-		float bpm = m.getBPM();
-		//The zone which does nowt
-		if (bpm < 110) {
+		float bpm = m.getHeartRate();
+		if (bpm < PostRunView.data.getTargetBPM() - 10) {
 			return Color.BLUE;
 		}
-		//Fat burning zone
-		else if (bpm < 132) {
-			return Color.GREEN;
+		else if (bpm > PostRunView.data.getTargetBPM() + 10) {
+			return Color.BLUE;
 		}
-		//Aerobic zone
-		else if (bpm < 176) {
-			return Color.YELLOW;
-		}
-		//Anaerobic/Technically dead zone
 		else {
-			return Color.RED;
+			return Color.GREEN;
 		}
 	}
 	

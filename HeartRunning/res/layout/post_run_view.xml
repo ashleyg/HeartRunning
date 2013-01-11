@@ -5,13 +5,22 @@
     android:paddingLeft="20dp"
     android:paddingRight="20dp" >
 
+    
+    <Spinner
+        android:id="@+id/workout_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="5dp"
+        android:layout_alignParentLeft="true"
+        android:prompt="@string/choose_workout"         />
+    
     <TextView
         android:id="@+id/distance_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="34dp"
         android:layout_alignParentLeft="true"
+        android:layout_below="@+id/workout_spinner"
         android:text="@string/distance_label"  />
     
     <TextView 
@@ -19,7 +28,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/distance_label"
-        android:layout_marginTop="34dp"
+        android:layout_below="@+id/workout_spinner"
         android:layout_marginLeft="10dp"
         android:layout_alignParentRight="true"  />
     
@@ -75,73 +84,42 @@
         android:layout_alignParentRight="true"  />
     
     <TextView
-        android:id="@+id/fat_label"
+        android:id="@+id/target_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/speed_label"
         android:layout_alignParentLeft="true"
-        android:text="@string/fat_label"  />
+        android:text="@string/target_label"  />
     
     <TextView 
-        android:id="@+id/fat"
+        android:id="@+id/target"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/speed_label"
-        android:layout_toRightOf="@+id/fat_label"
+        android:layout_toRightOf="@+id/target_label"
         android:layout_marginLeft="10dp"
         android:layout_alignParentRight="true"  />
     
-    <TextView
-        android:id="@+id/aerobic_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/fat_label"
-        android:layout_alignParentLeft="true"
-        android:text="@string/aerobic_label"  />
-    
-    <TextView 
-        android:id="@+id/aerobic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/fat_label"
-        android:layout_toRightOf="@+id/aerobic_label"
-        android:layout_marginLeft="10dp"
-        android:layout_alignParentRight="true"  />
-    
-    <TextView
-        android:id="@+id/anaerobic_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/aerobic_label"
-        android:layout_alignParentLeft="true"
-        android:text="@string/anaerobic_label"  />
-    
-    <TextView 
-        android:id="@+id/anaerobic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/aerobic_label"
-        android:layout_toRightOf="@+id/anaerobic_label"
-        android:layout_marginLeft="10dp"
-        android:layout_alignParentRight="true"  />
+
 
     <Button
         android:id="@+id/goto_map"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignRight="@+id/anaerobic"
-        android:layout_toRightOf="@+id/aerobic_label"
+        android:layout_alignRight="@+id/target"
+        android:layout_toRightOf="@+id/target_label"
         android:text="@string/goto_map" />
 
     <Button
         android:id="@+id/back_run_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/anaerobic_label"
+        android:layout_alignLeft="@+id/target_label"
         android:layout_alignParentBottom="true"
         android:layout_alignTop="@+id/goto_map"
         android:layout_toLeftOf="@+id/goto_map"
         android:text="@string/back_button" />
+
 
 </RelativeLayout>

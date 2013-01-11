@@ -7,6 +7,8 @@ import com.google.android.maps.MapView;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
@@ -22,6 +24,11 @@ public class PostRunMapView extends MapActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        
         setContentView(R.layout.activity_post_run_map_view);
         
         mView = (MapView) findViewById(R.id.mapview);
@@ -35,6 +42,8 @@ public class PostRunMapView extends MapActivity {
 				finish();
 			}
 		});
+        
+        
         
         drawPath();
     }

@@ -2,7 +2,6 @@ package com.local.heartrunning;
 
 import java.util.ArrayList;
 
-import com.local.heartrunning.HeartRate.Zone;
 
 /**
  * Analyse the run data...with SCIENCE
@@ -11,20 +10,23 @@ import com.local.heartrunning.HeartRate.Zone;
 public class WorkoutData {
 
 	ArrayList<MapDataPoint> points;
+	
+	private final float targetBPM;
+	
 	//Raw Metrics
 	float averageHeartRate, distance;
 	long time;
 	
 	//Analysed Metrics
-	float speed;
-	float fat, aerobic, anaerobic;
+	float speed, targetPercentage;
 	
 	/**
 	 * Constructor
 	 * @param pts
 	 */
-	public WorkoutData (ArrayList<MapDataPoint> pts) {
+	public WorkoutData (ArrayList<MapDataPoint> pts, float target) {
 		points = pts;
+		targetBPM = target;
 		calculateRawMetrics();
 		analyseData();
 	}
@@ -38,9 +40,12 @@ public class WorkoutData {
 		distance = 0;
 		time = 0;
 		speed = 0;
-		fat = 0;
-		aerobic = 0;
-		anaerobic = 0;
+		targetPercentage = 0;
+		targetBPM = -1000;
+	}
+	
+	public float getTargetBPM() {
+		return targetBPM;
 	}
 	
 	public ArrayList<MapDataPoint> getMapDataPoints() {
@@ -72,7 +77,7 @@ public class WorkoutData {
 		
 		averageHeartRate = 0;
 		for (MapDataPoint p : points) {
-			averageHeartRate += p.getBPM();
+			averageHeartRate += p.getHeartRate();
 		}
 		averageHeartRate /= points.size();
 		
@@ -118,46 +123,28 @@ public class WorkoutData {
 		speed = distance/t;
 		
 		//Analyse zones
-		long fatTime = 0, aerobicTime = 0, anaerobicTime = 0;
+		long targetTime = 0;
 		for (int i = 1; i < points.size(); i++) {
-			Zone zone = points.get(i).getHeartRate().getZone();
+			float bpm = points.get(i).getHeartRate();
 			long gapTime = points.get(i).getTime() - points.get(i-1).getTime();;
-			switch(zone) {
-				case FAT:
-					fatTime += gapTime;
-					break;
-				case AEROBIC:
-					aerobicTime += gapTime;
-					break;
-				case ANAEROBIC:
-					anaerobicTime += gapTime;
-					break;
-				default:
-					break;
-					
+			if (bpm > targetBPM - 10 && bpm < targetBPM + 10) {
+				targetTime += gapTime;
 			}
+
 		}
 		float unitTime = 100/((float) time);
-		fat = unitTime*((float)fatTime);
-		aerobic = unitTime*((float)aerobicTime);
-		anaerobic = unitTime*((float)anaerobicTime);
+		targetPercentage = unitTime*((float)targetTime);
+
 	}
 	
 	public String getSpeed() {
 		return String.format("%.2f", speed) + " km/h";
 	}
 	
-	public String getFat() {
-		return Integer.toString(Math.round(fat)) + "%";
+	public String getTargetTime() {
+		return Integer.toString(Math.round(targetPercentage)) + "%";
 	}
 	
-	public String getAerobic() {
-		return Integer.toString(Math.round(aerobic)) + "%";
-	}
-	
-	public String getAnaerobic() {
-		return Integer.toString(Math.round(anaerobic)) + "%";
-	}
 	
 	
 }

@@ -15,12 +15,12 @@ import android.util.Log;
 
 public class MapDataPoint {
 	private Location location;
-	private HeartRate bpm;
+	private float bpm;
 	private Date time;
 	
-	public MapDataPoint(Location location, float bpm) {
+	public MapDataPoint(Location location, float beats) {
 		this.location = location;
-		this.bpm = new HeartRate(bpm);
+		this.bpm = beats;
 		this.time = new Date(System.currentTimeMillis());
 	}
 	
@@ -35,7 +35,7 @@ public class MapDataPoint {
 		
 		//Get the beats per minute
 		node = (Node) e.getElementsByTagName("bpm").item(0);
-		this.bpm = new HeartRate(Float.parseFloat(node.getChildNodes().item(0).getNodeValue()));
+		this.bpm = Float.parseFloat(node.getChildNodes().item(0).getNodeValue());
 		
 		//Get the location
 		Element element = (Element) e.getElementsByTagName("location").item(0);
@@ -53,12 +53,8 @@ public class MapDataPoint {
 		return this.location;
 	}
 	
-	public HeartRate getHeartRate() {
+	public float getHeartRate() {
 		return bpm;
-	}
-	
-	public float getBPM() {
-		return this.bpm.getBPM();
 	}
 	
 	public GeoPoint getLocationAsGeoPoint() {
@@ -79,7 +75,7 @@ public class MapDataPoint {
 	}
 	
 	public boolean hasBPM() {
-		if (bpm.getBPM() <= 0) {
+		if (bpm <= 0) {
 			return false;
 		}
 		return true;
@@ -117,7 +113,7 @@ public class MapDataPoint {
 				
 		//Add Heartrate
 		xml += "<bpm>";
-		xml += Float.toString(bpm.getBPM());
+		xml += Float.toString(bpm);
 		xml += "</bpm>";
 				
 				
