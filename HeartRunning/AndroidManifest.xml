@@ -82,7 +82,7 @@
 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyBGUuT0ls17gRg50inoDohzR6z7lA2wAP0" />
+            android:value="" />
 
         <activity
             android:name="com.local.heartrunning.PostRunMapView"
